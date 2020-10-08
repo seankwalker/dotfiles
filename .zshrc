@@ -105,6 +105,7 @@ alias vi="vim -p"
 # Shortcuts
 alias dotf="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias trc="vi ~/.alacritty.yml" # "Terminal rc"
+alias vrc="vi ~/.vimrc"
 alias zource="source ~/.zshrc"
 alias zrc="vi ~/.zshrc"
 
@@ -113,3 +114,6 @@ alias zrc="vi ~/.zshrc"
 # Binaries
 ######################################
 export PATH="$(yarn global bin):$PATH"
+
+source /usr/local/bin/z/z.sh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
