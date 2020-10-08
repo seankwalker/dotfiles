@@ -1,0 +1,39 @@
+font:
+  normal:
+    family: Input Mono
+    style: Regular
+  size: 12.0
+
+draw_bold_text_with_bright_colors: true
+
+colors:
+  primary:
+    background: "#2A2B30"
+    foreground: "#F5FAFF"
+
+  cursor:
+    text: CellBackground
+    cursor: CellForeground
+
+  normal:
+    black:   "#2A2D37"
+    red:     "#4B8ACB"
+    green:   "#22CEC6"
+    yellow:  "#51518E"
+    blue:    "#5EABFD"
+    magenta: "#A571F4"
+    cyan:    "#93DDFB"
+    white:   "#5F6786"
+
+  bright:
+    black:   "#777B8C"
+    red:     "#85B1E0"
+    green:   "#22CEC6"
+    yellow:  "#8E8ECC"
+    blue:    "#959FC7"
+    magenta: "#DDA2F6"
+    cyan:    "#29C2FF"
+    white:   "#D9E1FF"
+
+cursor:
+  unfocused_hollow: true
