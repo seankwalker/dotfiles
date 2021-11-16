@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: ${0} upstream"
+    exit 1
+fi
+
+upstream=$1
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+set -x
+
+git checkout $upstream && git pull -p && git checkout $branch && git rebase $upstream

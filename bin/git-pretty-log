@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+# h/t Gary Bernhardt
+# https://www.destroyallsoftware.com/screencasts/catalog/pretty-git-logs
+
+HASH="%C(always, bold red)%h%C(always, reset)"
+TIME="%C(always, green)(%ar)%C(always, reset)"
+AUTHOR="%C(always, cyan)%an%C(always, reset)"
+REFS="%C(always, bold magenta)%d%C(always, reset)"
+SUBJECT="%s"
+
+FORMAT="$HASH\`$AUTHOR $TIME\`$SUBJECT $REFS"
+
+main() {
+    git log --graph --oneline --pretty="tformat:$FORMAT" $* | pretty_git_format
+}
+
+pretty_git_format() {
+    # replace (2 years ago) with (2 years)
+    sed -Ee 's/(^[^<]*) ago\)/\1)/' |
+
+    # replace (2 years, 5 months) with (2 years)
+    sed -Ee 's/(^[^<]*), [[:digit:]]+ .*months?\)/\1)/' |
+
+    # line columns up based on } delimiter
+    column -s "\`" -t |
+
+    # optionally paginate
+    less --chop-long-lines --RAW-CONTROL-CHARS
+}
+
+main

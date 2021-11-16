@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $# -eq 0 ]]; then
+    COMMIT="HEAD"
+elif [[ $# -eq 1 ]]; then
+    COMMIT=$1
+else
+    echo "usage: ${0} [commit]"
+    exit 1
+fi
+
+set -x
+
+git diff ${COMMIT}~ $COMMIT
