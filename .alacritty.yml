@@ -1,8 +1,22 @@
+window:
+  dynamic_padding: true
+  decorations: none
+  startup_mode: Fullscreen
+  dynamic_title: true
+
 font:
   normal:
     family: Input
     style: Regular
-  size: 12.0
+  size: 16.0
+
+  # TODO: Figure out why these are 1 on perihelion.
+  offset:
+    x: 0
+    y: 0
+
+  # Recommended for retina displays
+  use_thin_strokes: true
 
 draw_bold_text_with_bright_colors: true
 
@@ -20,6 +34,7 @@ colors:
     red:     "#4B8ACB"
     green:   "#22CEC6"
     yellow:  "#51518E"
+    # yellow: "#70518E" from perihelion
     blue:    "#5EABFD"
     magenta: "#A571F4"
     cyan:    "#93DDFB"
@@ -29,11 +44,21 @@ colors:
     black:   "#777B8C"
     red:     "#85B1E0"
     green:   "#22CEC6"
+    # green: "9AEFEA" from perihelion
     yellow:  "#8E8ECC"
     blue:    "#959FC7"
     magenta: "#DDA2F6"
     cyan:    "#29C2FF"
     white:   "#D9E1FF"
 
+background_opacity: 1.0
+
 cursor:
   unfocused_hollow: true
+
+# Alt char codes
+key_bindings:
+  - { key: Up,    mods: Alt, chars: "\x1b[1;5A" }
+  - { key: Down,  mods: Alt, chars: "\x1b[1;5B" }
+  - { key: Left,  mods: Alt, chars: "\x1bb" }
+  - { key: Right, mods: Alt, chars: "\x1bf" }
