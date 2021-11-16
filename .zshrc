@@ -6,7 +6,7 @@
 export ZSH=~/.oh-my-zsh
 
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME=aphelion
+ZSH_THEME=skw
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
