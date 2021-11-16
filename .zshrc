@@ -60,7 +60,7 @@ ZSH_THEME=skw
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git macos)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -206,6 +206,9 @@ export PATH="/usr/local/bin:$PATH"
 
 # Yarn
 export PATH="$(yarn global bin):$PATH"
+
+# zsh-syntax-highlighting
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Arch
 # source /usr/local/bin/z/z.sh
