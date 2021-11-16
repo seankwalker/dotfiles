@@ -103,7 +103,7 @@ alias rm="rm -i"
 alias vi="vim -p"
 
 # Shortcuts
-alias dotf="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+alias dotf="git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME"
 alias trc="vi ~/.alacritty.yml" # "Terminal rc"
 alias vrc="vi ~/.vimrc"
 alias zource="source ~/.zshrc"
