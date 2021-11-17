@@ -62,7 +62,7 @@ ZSH_THEME=skw
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git macos)
 
-source $ZSH/oh-my-zsh.sh
+. $ZSH/oh-my-zsh.sh
 
 
 ######################################
@@ -124,7 +124,7 @@ alias pip="pip3" # Use pip3 by default
 # Shortcuts
 alias trc="vi ~/.alacritty.yml" # "Terminal rc"
 alias vrc="vi ~/.vimrc"
-alias zource="source ~/.zshrc"
+alias zource=". ~/.zshrc"
 alias zrc="vi ~/.zshrc"
 
 # Manage dotfiles
@@ -172,7 +172,7 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # Load `rvm` into a shell session *as a function*
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 # [[ "$APP" = *"/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/"* ]] && {
 #   echo Xcode detected
 #   rvm use system
@@ -218,11 +218,11 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="$(yarn global bin):$PATH"
 
 # zsh-syntax-highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Arch
-# source /usr/local/bin/z/z.sh
-# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# . /usr/local/bin/z/z.sh
+# . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # z
 . /$HOME/bin/z/z.sh
