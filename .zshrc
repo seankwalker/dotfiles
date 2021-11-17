@@ -204,6 +204,7 @@ export PATH="/$HOME/bin:$PATH"
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/opt/redis@4.0/bin:$PATH" # Redis v4.0.x
 # export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby
 # export PATH="/usr/local/opt/postgresql@12/bin:$PATH" # Postgres
 # export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH" # GNU grep
