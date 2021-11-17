@@ -179,15 +179,19 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # }
 
 # MongoDB
-export MONGODB_URI=""
+export MONGODB_URI="" # defined in .env
 
 # npm
-export NPM_TOKEN=""
+export NPM_TOKEN="" # defined in .env
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Secrets
+# Not tracked in dotfiles because...duh.....
+. $HOME/.env
 
 
 ######################################
