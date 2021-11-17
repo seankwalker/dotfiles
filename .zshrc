@@ -89,6 +89,13 @@ export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
+# Automatically start tmux, if: it exists, the shell is interactive, and this
+# is not being evaluated in an exisiting session.
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] \
+        && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+    exec tmux
+fi
+
 
 ######################################
 # Functions
@@ -96,7 +103,7 @@ export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
 
 # Move to specified directory and open it in Vim.
 function vim_open {
-    z $1 && vim .
+    _z $1 && vim .
 }
 
 
@@ -154,7 +161,8 @@ export CC="clang" # Use `clang` to compile C
 
 # use Java 1.8
 # export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_212.jdk/Contents/Home"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_212.jdk/Contents/Home"
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_301.jdk/Contents/Home
 
 # Android SDK setup
 export ANDROID_HOME=$HOME/Library/Android/sdk
@@ -186,8 +194,6 @@ export NVM_DIR="$HOME/.nvm"
 # Binaries
 ######################################
 
-. /$HOME/bin/z/z.sh # `z` directory changer
-
 # Personal bin
 export PATH="/$HOME/bin:$PATH"
 
@@ -213,3 +219,6 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Arch
 # source /usr/local/bin/z/z.sh
 # source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# z
+. /Users/seankwalker/bin/z/z.sh
