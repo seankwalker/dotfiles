@@ -225,4 +225,4 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # z
-. /Users/seankwalker/bin/z/z.sh
+. /$HOME/bin/z/z.sh
