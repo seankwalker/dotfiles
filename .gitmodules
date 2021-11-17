@@ -16,3 +16,6 @@
 [submodule ".vim/pack/plugins/start/vim-prettier"]
 	path = .vim/pack/plugins/start/vim-prettier
 	url = git@github.com:prettier/vim-prettier.git
+[submodule "bin/z"]
+	path = bin/z
+	url = git@github.com:rupa/z.git
