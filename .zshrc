@@ -227,4 +227,4 @@ export PATH="$(yarn global bin):$PATH"
 # . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # z
-. /$HOME/bin/z/z.sh
+. $HOME/bin/z/z.sh
