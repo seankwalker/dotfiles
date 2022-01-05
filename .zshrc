@@ -151,6 +151,7 @@ alias glg="git-pretty-log"  # h/t Gary Bernhardt
 alias gpf="git push -f"
 alias gpo="git-quick-push"  # push to upstream with current branch name
 alias gr="git-easy-rebase"  # update specified branch then rebase onto
+alias gs="git stash"
 
 
 ######################################
