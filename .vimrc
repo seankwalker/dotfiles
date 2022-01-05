@@ -51,6 +51,7 @@ let g:tsuquyomi_disable_quickfix = 1 " Disable compile on save
 nnoremap <leader>d :TsuDefinition<cr>
 nnoremap <leader>D :TsuTypeDefinition<cr>
 nnoremap <leader>t :echo tsuquyomi#hint()<cr>
+nnoremap <leader>r :TsuquyomiReloadProject<cr>
 
 " vim-rescript
 autocmd FileType rescript nnoremap <silent> <buffer> <localleader>p :RescriptFormat<cr>
