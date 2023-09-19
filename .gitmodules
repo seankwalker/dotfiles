@@ -13,9 +13,6 @@
 [submodule ".vim/pack/plugins/start/vim-jsx-typescript"]
 	path = .vim/pack/plugins/start/vim-jsx-typescript
 	url = git@github.com:peitalin/vim-jsx-typescript.git
-[submodule ".vim/pack/plugins/start/vim-prettier"]
-	path = .vim/pack/plugins/start/vim-prettier
-	url = git@github.com:prettier/vim-prettier.git
 [submodule "bin/z"]
 	path = bin/z
 	url = git@github.com:rupa/z.git
