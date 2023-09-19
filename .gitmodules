@@ -25,3 +25,6 @@
 [submodule ".vim/pack/plugins/start/yats.vim"]
 	path = .vim/pack/plugins/start/yats.vim
 	url = git@github.com:HerringtonDarkholme/yats.vim.git
+[submodule ".vim/pack/plugins/start/vim-prettier"]
+	path = .vim/pack/plugins/start/vim-prettier
+	url = git@github.com:adnan007d/vim-prettier.git
