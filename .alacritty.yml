@@ -1,7 +1,7 @@
 window:
   dynamic_padding: true
   decorations: none
-  startup_mode: Fullscreen
+  startup_mode: Maximized
   dynamic_title: true
 
 font:

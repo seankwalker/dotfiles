@@ -28,3 +28,5 @@
 [submodule ".vim/pack/plugins/start/vim-graphql"]
 	path = .vim/pack/plugins/start/vim-graphql
 	url = git@github.com:jparise/vim-graphql.git
+[submodule "./vim/pack/plugins/start/vim-prettier"]
+	url = git@github.com:adnan007d/vim-prettier.git

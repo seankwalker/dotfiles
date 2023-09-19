@@ -106,6 +106,19 @@ function vim_open {
     _z $1 && vim .
 }
 
+# Check which port a process is listening on OR which process is listening on
+# a port.
+# h/t https://stackoverflow.com/a/30029855
+function listening {
+    if [ $# -eq 0 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    elif [ $# -eq 1 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+    else
+        echo "Usage: listening [pattern]"
+    fi
+}
+
 
 ######################################
 # Aliases
@@ -151,7 +164,9 @@ alias glg="git-pretty-log"  # h/t Gary Bernhardt
 alias gpf="git push -f"
 alias gpo="git-quick-push"  # push to upstream with current branch name
 alias gr="git-easy-rebase"  # update specified branch then rebase onto
+alias grc="git rebase --continue"
 alias gs="git stash"
+alias gdf="git-per-file-diff"
 
 
 ######################################
@@ -163,14 +178,18 @@ export CC="clang" # Use `clang` to compile C
 # use Java 1.8
 # export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_212.jdk/Contents/Home"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_301.jdk/Contents/Home
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_301.jdk/Contents/Home
+# Use Java 11 (Homebrew)
+export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.18/libexec/openjdk.jdk/Contents/Home
 
 # Android SDK setup
 export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/ndk-bundle
 
 # Load `rvm` into a shell session *as a function*
 # [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
@@ -180,10 +199,10 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # }
 
 # MongoDB
-export MONGODB_URI="" # defined in .env
+#export MONGODB_URI="" # defined in .env
 
 # npm
-export NPM_TOKEN="" # defined in .env
+#export NPM_TOKEN="" # defined in .env
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
@@ -205,9 +224,9 @@ export PATH="/$HOME/bin:$PATH"
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
-export PATH="/usr/local/opt/redis@4.0/bin:$PATH" # Redis v4.0.x
-# export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby
-# export PATH="/usr/local/opt/postgresql@12/bin:$PATH" # Postgres
+export PATH="/usr/local/opt/redis@4.0/bin:$PATH" # Redis 4.0.x
+export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby 3.x
+export PATH="/usr/local/opt/postgresql@13/bin:$PATH" # Postgres
 # export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH" # GNU grep
 
 # Use system installation of Ruby for Xcode .ipa building
@@ -217,7 +236,7 @@ export PATH="/usr/local/opt/redis@4.0/bin:$PATH" # Redis v4.0.x
 # export PATH="$HOME/.cargo/bin:$PATH"
 
 # Yarn
-export PATH="$(yarn global bin):$PATH"
+# export PATH="$(yarn global bin):$PATH"
 
 # zsh-syntax-highlighting
 . /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -228,3 +247,6 @@ export PATH="$(yarn global bin):$PATH"
 
 # z
 . $HOME/bin/z/z.sh
+
+# Created by `pipx` on 2022-09-28 23:53:49
+export PATH="$PATH:/Users/seankwalker/.local/bin"

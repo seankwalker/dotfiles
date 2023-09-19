@@ -19,8 +19,8 @@ set expandtab       " Tabs -> spaces
 let mapleader=" "   " Set spacebar as leader
 let maplocalleader=" "
 
-" Enable backspace
-" set backspace=indent,eol,start
+" YAML -- 2-space indentation
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 " Aesthetic
 syntax on               " Turn on syntax highlighting
@@ -51,25 +51,13 @@ let g:tsuquyomi_disable_quickfix = 1 " Disable compile on save
 nnoremap <leader>d :TsuDefinition<cr>
 nnoremap <leader>D :TsuTypeDefinition<cr>
 nnoremap <leader>t :echo tsuquyomi#hint()<cr>
-nnoremap <leader>r :TsuquyomiReloadProject<cr>
+nnoremap <leader>[ :TsuReferences<cr>
+nnoremap <leader>] :TsuImplementation<cr>
+nnoremap <leader>c :TsuGeterr<cr>
+nnoremap <leader>C :Copilot<cr>
 
-" vim-rescript
-autocmd FileType rescript nnoremap <silent> <buffer> <localleader>p :RescriptFormat<cr>
-
-" CtrlP
-let g:ctrlp_cache_dir=$HOME . "/.cache/ctrlp"
-" use `hg` for faster indexing h/t
-" https://stackoverflow.com/a/32520039/12691951
-let g:ctrlp_user_command="ag %s -i --hidden --nocolor --nogroup
-    \ --ignore .git
-    \ --ignore .DS_Store
-    \ --ignore .jekyll-cache
-    \ --ignore _site
-    \ --ignore android
-    \ --ignore build
-    \ --ignore dist
-    \ --ignore ios
-    \ -g ''"
+" LeaderF
+let g:Lf_ShowDevIcons = 0
 
 " QoL
 " h/t Gary Bernhardt
@@ -77,9 +65,10 @@ let g:ctrlp_user_command="ag %s -i --hidden --nocolor --nogroup
 cnoremap %% <C-R>=expand("%:h")."/"<cr>
 map <leader>e :edit %%
 map <leader>v :view %%
-map <leader>f :\|:CtrlP<cr>
-map <leader>gf :\|:CtrlP %%<cr>
 nnoremap <leader><leader> <c-^>
+
+" Bind C-w z to maximize vertically (this is to match tmux C-b z maximize) 
+map <C-w>z <C-w>\|
 
 function! InsertTabWrapper()
     let col=col(".") - 1
@@ -92,6 +81,8 @@ endfunction
 inoremap <expr> <tab> InsertTabWrapper()
 inoremap <s-tab> <c-n>
 
+" Remap Omni-Complete (original bind is inconvenient)
+" inoremap <leader><tab> <C-x><C-o>
 
 set winwidth=84
 " We have to have a winheight bigger than we want to set winminheight. But if
