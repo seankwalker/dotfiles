@@ -20,7 +20,7 @@
 	path = bin/z
 	url = git@github.com:rupa/z.git
 [submodule ".vim/pack/plugins/start/yats.vim"]
-	path = /Users/seankwalker/.vim/pack/plugins/start/yats.vim
+	path = .vim/pack/plugins/start/yats.vim
 	url = git@github.com:HerringtonDarkholme/yats.vim.git
 [submodule ".vim/pack/plugins/start/LeaderF"]
 	path = .vim/pack/plugins/start/LeaderF
@@ -28,5 +28,3 @@
 [submodule ".vim/pack/plugins/start/vim-graphql"]
 	path = .vim/pack/plugins/start/vim-graphql
 	url = git@github.com:jparise/vim-graphql.git
-[submodule "./vim/pack/plugins/start/vim-prettier"]
-	url = git@github.com:adnan007d/vim-prettier.git
