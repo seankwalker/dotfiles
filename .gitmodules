@@ -19,7 +19,7 @@
 [submodule "bin/z"]
 	path = bin/z
 	url = git@github.com:rupa/z.git
-[submodule "/Users/seankwalker/.vim/pack/plugins/start/yats.vim"]
+[submodule ".vim/pack/plugins/start/yats.vim"]
 	path = /Users/seankwalker/.vim/pack/plugins/start/yats.vim
 	url = git@github.com:HerringtonDarkholme/yats.vim.git
 [submodule ".vim/pack/plugins/start/LeaderF"]
