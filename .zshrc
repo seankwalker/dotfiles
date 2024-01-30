@@ -179,8 +179,12 @@ export CC="clang" # Use `clang` to compile C
 # export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_212.jdk/Contents/Home"
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_301.jdk/Contents/Home
-# Use Java 11 (Homebrew)
-export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.18/libexec/openjdk.jdk/Contents/Home
+
+# Use Java 11 (Homebrew, Openjdk)
+# export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.18/libexec/openjdk.jdk/Contents/Home
+
+# Use Java 11 (Homebrew, zulu)
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
 
 # Android SDK setup
 export ANDROID_HOME=$HOME/Library/Android/sdk
@@ -250,3 +254,5 @@ export PATH="/usr/local/opt/postgresql@13/bin:$PATH" # Postgres
 
 # Created by `pipx` on 2022-09-28 23:53:49
 export PATH="$PATH:/Users/seankwalker/.local/bin"
+
+setopt INC_APPEND_HISTORY
