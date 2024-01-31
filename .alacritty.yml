@@ -16,7 +16,7 @@ font:
     y: 0
 
   # Recommended for retina displays
-  use_thin_strokes: true
+  # use_thin_strokes: true
 
 draw_bold_text_with_bright_colors: true
 
@@ -51,7 +51,7 @@ colors:
     cyan:    "#29C2FF"
     white:   "#D9E1FF"
 
-background_opacity: 1.0
+      # background_opacity: 1.0
 
 cursor:
   unfocused_hollow: true

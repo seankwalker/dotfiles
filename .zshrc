@@ -135,7 +135,7 @@ alias python="python3" # Use python3 by default
 alias pip="pip3" # Use pip3 by default
 
 # Shortcuts
-alias trc="vi ~/.alacritty.yml" # "Terminal rc"
+alias trc="vi ~/.alacritty.toml" # "Terminal rc"
 alias vrc="vi ~/.vimrc"
 alias zource=". ~/.zshrc"
 alias zrc="vi ~/.zshrc"
