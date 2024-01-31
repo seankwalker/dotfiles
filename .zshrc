@@ -243,7 +243,8 @@ export PATH="/usr/local/opt/postgresql@13/bin:$PATH" # Postgres
 # export PATH="$(yarn global bin):$PATH"
 
 # zsh-syntax-highlighting
-. /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# . /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Arch
 # . /usr/local/bin/z/z.sh

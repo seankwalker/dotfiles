@@ -1,0 +1,73 @@
+background_opacity = 1.0
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "#777B8C"
+blue = "#959FC7"
+cyan = "#29C2FF"
+green = "#22CEC6"
+magenta = "#DDA2F6"
+red = "#85B1E0"
+white = "#D9E1FF"
+yellow = "#8E8ECC"
+
+[colors.cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[colors.normal]
+black = "#2A2D37"
+blue = "#5EABFD"
+cyan = "#93DDFB"
+green = "#22CEC6"
+magenta = "#A571F4"
+red = "#4B8ACB"
+white = "#5F6786"
+yellow = "#51518E"
+
+[colors.primary]
+background = "#2A2B30"
+foreground = "#F5FAFF"
+
+[cursor]
+unfocused_hollow = true
+
+[font]
+size = 16.0
+use_thin_strokes = true
+
+[font.normal]
+family = "Input"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 0
+
+[[keyboard.bindings]]
+chars = "\u001B[1;5A"
+key = "Up"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001B[1;5B"
+key = "Down"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001Bb"
+key = "Left"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001Bf"
+key = "Right"
+mods = "Alt"
+
+[window]
+decorations = "none"
+dynamic_padding = true
+dynamic_title = true
+startup_mode = "Maximized"
