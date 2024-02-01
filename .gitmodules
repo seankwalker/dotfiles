@@ -31,3 +31,6 @@
 [submodule ".tmux/plugins/tpm"]
 	path = .tmux/plugins/tpm
 	url = git@github.com:tmux-plugins/tpm.git
+[submodule "/Users/seankwalker/.vim/pack/plugins/start/copilot.vim"]
+	path = /Users/seankwalker/.vim/pack/plugins/start/copilot.vim
+	url = git@github.com:github/copilot.vim.git
