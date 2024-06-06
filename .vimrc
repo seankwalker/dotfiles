@@ -48,6 +48,7 @@ let g:airline#extensions#tabline#formatter="default"
 
 " Tsuquyomi
 let g:tsuquyomi_disable_quickfix = 1 " Disable compile on save
+let g:tsuquyomi_tsserver_max_old_space_size = 12288 " Increase memory limit
 nnoremap <leader>d :TsuDefinition<cr>
 nnoremap <leader>D :TsuTypeDefinition<cr>
 nnoremap <leader>t :echo tsuquyomi#hint()<cr>

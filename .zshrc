@@ -175,16 +175,8 @@ alias gdf="git-per-file-diff"
 
 export CC="clang" # Use `clang` to compile C
 
-# use Java 1.8
-# export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
-# export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_212.jdk/Contents/Home"
-# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_301.jdk/Contents/Home
-
-# Use Java 11 (Homebrew, Openjdk)
-# export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.18/libexec/openjdk.jdk/Contents/Home
-
-# Use Java 11 (Homebrew, zulu)
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
+# Use Java 11 (Homebrew, zulu17)
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
 # Android SDK setup
 export ANDROID_HOME=$HOME/Library/Android/sdk
@@ -231,6 +223,7 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/opt/redis@4.0/bin:$PATH" # Redis 4.0.x
 export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby 3.x
 export PATH="/usr/local/opt/postgresql@13/bin:$PATH" # Postgres
+export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
 # export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH" # GNU grep
 
 # Use system installation of Ruby for Xcode .ipa building

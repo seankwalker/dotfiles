@@ -35,7 +35,7 @@ foreground = "#F5FAFF"
 unfocused_hollow = true
 
 [font]
-size = 16.0
+size = 18.0
 # use_thin_strokes = true
 
 [font.normal]
