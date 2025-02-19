@@ -1,0 +1,56 @@
+# Ref: https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
+#      https://www.ditig.com/publications/256-colors-cheat-sheet
+
+# Black
+palette = 0=#2a2d37
+
+# Maroon / Red
+palette = 1=#4b8acb
+
+# Green
+palette = 2=#22cec6
+
+# Olive / Yellow
+palette = 3=#51518e
+
+# Navy / Blue
+palette = 4=#5eabfd
+
+# Purple / Magenta
+palette = 5=#a571f4
+
+# Teal / Cyan
+palette = 6=#93ddfb
+
+# Silver / White
+palette = 7=#5f6786
+
+# Grey / Bright Black
+palette = 8=#777b8c
+
+# Red / Bright Red
+palette = 9=#4b8acb
+
+# Lime / Bright Green
+palette = 10=#22cec6
+
+# Yellow / Bright Yellow
+palette = 11=#8e8ecc
+
+# Blue / Bright Blue
+palette = 12=#959fc7
+
+# Fuschia / Bright Magenta
+palette = 13=#dda2f6
+
+# Aqua / Bright Cyan
+palette = 14=#29c2ff
+
+# White / Bright White
+palette = 15=#d9e1ff
+
+background = 2a2b30
+foreground = f5faff
+cursor-color = f5faff
+# selection-background = 2a2b30
+# selection-foreground = f5faff

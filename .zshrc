@@ -135,7 +135,7 @@ alias python="python3" # Use python3 by default
 alias pip="pip3" # Use pip3 by default
 
 # Shortcuts
-alias trc="vi ~/.alacritty.toml" # "Terminal rc"
+alias trc="vi ~/.config/ghostty/config" # "Terminal rc"
 alias vrc="vi ~/.vimrc"
 alias zource=". ~/.zshrc"
 alias zrc="vi ~/.zshrc"
@@ -250,3 +250,11 @@ export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
 export PATH="$PATH:/Users/seankwalker/.local/bin"
 
 setopt INC_APPEND_HISTORY
+
+# pnpm
+export PNPM_HOME="/Users/sean/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

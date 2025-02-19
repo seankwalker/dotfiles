@@ -1,0 +1,13 @@
+theme = ariake
+
+font-size = 16
+
+bold-is-bright = true
+
+mouse-scroll-multiplier = 2
+
+window-decoration = false
+
+font-feature = -calt
+font-feature = -liga
+font-feature = -dlig
