@@ -1,0 +1,72 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "EmptyPane",
+    "bindings": {
+      "space f": "file_finder::Toggle"
+    }
+  },
+  {
+    "bindings": {
+      "cmd-i": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+      "cmd-s": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      // "j k": ["workspace::SendKeystrokes", "escape"]
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      "space f": "file_finder::Toggle",
+      "space space": "pane::AlternateFile",
+      "space d": "editor::GoToDefinition",
+      "space shift-d": "editor::GoToTypeDefinition",
+      "space e ": "project_panel::ToggleFocus",
+      "space t": "editor::Hover",
+      "space [": "editor::FindAllReferences"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "enter": [
+        "project_panel::Open",
+        "workspace::SendKeystrokes",
+        "cmd-shift-e"
+      ]
+    }
+  },
+  {
+    "context": "FileFinder && not_editing",
+    "bindings": {
+      // FIXME: Currently SendKeystrokes is broken in FileFinder
+      // see: https://github.com/zed-industries/zed/issues/25683
+      // Hopefully this will be fixed soon and then we can use jk to navigate in the fuzzy finder
+      "ctrl-j": ["workspace::SendKeystrokes", "down"],
+      "ctrl-k": ["workspace::SendKeystrokes", "up"]
+    }
+  },
+  {
+    "context": "BufferSearchBar > Editor",
+    "bindings": {
+      // FIXME: For whatever reason you can't PushRegister in the BufferSearchBar Editor. So I can't yank -> search. WTF
+      "ctrl-r": ["vim::PushRegister", "\""]
+    }
+  }
+]
