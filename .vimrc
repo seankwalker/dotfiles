@@ -24,7 +24,7 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 " Aesthetic
 syntax on               " Turn on syntax highlighting
-colorscheme elflord     " Set theme
+colorscheme elflord_skw     " Set theme
 set background=dark
 
 " Visual delineation of 80, 120 lines

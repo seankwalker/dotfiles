@@ -64,6 +64,10 @@ plugins=(git macos)
 
 . $ZSH/oh-my-zsh.sh
 
+# Secrets
+# Not tracked in dotfiles because...duh.....
+. $HOME/.env
+
 
 ######################################
 # General Terminal Setup
@@ -119,6 +123,14 @@ function listening {
     fi
 }
 
+function api_logs {
+    if [ $# -eq 0 ]; then
+        echo "Usage: api_logs pod_name"
+    else
+        kubectl logs $1 --namespace api | jq -R --color-output 'fromjson? | .' | less -R
+    fi
+}
+
 
 ######################################
 # Aliases
@@ -133,12 +145,16 @@ alias rm="rm -i" # Warn about deletion by default
 alias gdb="gdb -tui" # Open `gdb` UI by default
 alias python="python3" # Use python3 by default
 alias pip="pip3" # Use pip3 by default
+alias yt="yarn test:local --coverage=false"
+alias tf="terraform"
 
 # Shortcuts
 alias trc="vi ~/.config/ghostty/config" # "Terminal rc"
 alias vrc="vi ~/.vimrc"
 alias zource=". ~/.zshrc"
 alias zrc="vi ~/.zshrc"
+alias ghb="GH_TOKEN=$GH_TOKEN_BRANDON gh"
+# alias ide="open /Applications/Cursor.app/"
 
 # Manage dotfiles
 alias dotf="git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME"
@@ -205,10 +221,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Secrets
-# Not tracked in dotfiles because...duh.....
-. $HOME/.env
-
 
 ######################################
 # Binaries
@@ -222,8 +234,7 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/opt/redis@4.0/bin:$PATH" # Redis 4.0.x
 export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby 3.x
-export PATH="/usr/local/opt/postgresql@13/bin:$PATH" # Postgres
-export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 # export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH" # GNU grep
 
 # Use system installation of Ruby for Xcode .ipa building
@@ -246,8 +257,14 @@ export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
 # z
 . $HOME/bin/z/z.sh
 
-# Created by `pipx` on 2022-09-28 23:53:49
+# pipx
 export PATH="$PATH:/Users/seankwalker/.local/bin"
+
+# poetry
+export PATH="/Users/sean/.local/bin:$PATH"
+
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/Users/sean/.zsh/completions:"* ]]; then export FPATH="/Users/sean/.zsh/completions:$FPATH"; fi
 
 setopt INC_APPEND_HISTORY
 
@@ -258,3 +275,12 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(mise activate zsh)"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/sean/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sean/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/sean/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sean/google-cloud-sdk/completion.zsh.inc'; fi
