@@ -183,6 +183,9 @@ alias gr="git-easy-rebase"  # update specified branch then rebase onto
 alias grc="git rebase --continue"
 alias gs="git stash"
 alias gdf="git-per-file-diff"
+alias gwa='git-manage-worktree add'
+alias gwr='git-manage-worktree rm'
+alias gwo='git-manage-worktree open'
 
 
 ######################################
