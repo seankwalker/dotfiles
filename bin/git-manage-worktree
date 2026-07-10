@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+set -e
+
+usage() {
+  cat <<EOF
+usage:
+  ${0##*/} add  <branch> [start-point]
+  ${0##*/} open <branch>
+  ${0##*/} rm   [-f] [-d] <branch>
+
+env:
+  WORKTREES_BASE   (default: \$HOME/Developer/mono-worktrees)
+
+notes:
+  - worktree dir name is branch with '/' replaced by '-'
+  - add: if run inside tmux, creates a detached tmux window cd'd into the new worktree
+  - open: opens a detached tmux window cd'd into an existing worktree
+  - rm: -f = --force, -d = delete local branch after removing worktree
+EOF
+  exit 1
+}
+
+WORKTREES_BASE="${WORKTREES_BASE:-$HOME/Developer/mono-worktrees}"
+
+sanitize_branch() {
+  # Option B: flatten slashes
+  echo "${1//\//-}"
+}
+
+ensure_in_git_repo() {
+  git rev-parse --show-toplevel >/dev/null 2>&1 || {
+    echo "error: not inside a git repo"
+    exit 1
+  }
+}
+
+open_tmux_window() {
+  local dir="$1"
+  local name="$2"
+
+  # Only do this when the script is run inside tmux.
+  [[ -n "${TMUX:-}" ]] || {
+    echo "error: not inside tmux"
+    exit 1
+  }
+
+  command -v tmux >/dev/null 2>&1 || {
+    echo "error: tmux not found"
+    exit 1
+  }
+
+  # -d creates the window without focusing/selecting it.
+  # -c starts the shell in the given directory.
+  if tmux new-window -d -c "$dir" -n "$name" 2>/dev/null; then
+    return 0
+  fi
+
+  # Fallback for older tmux versions without -c support.
+  tmux new-window -d -n "$name" "cd \"${dir}\" && exec \"${SHELL:-/bin/bash}\""
+}
+
+cmd="${1:-}"
+shift || true
+
+case "$cmd" in
+  add)
+    ensure_in_git_repo
+
+    if [[ $# -lt 1 || $# -gt 2 ]]; then usage; fi
+    BRANCH="$1"
+    START="${2:-main}"
+
+    SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+    DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+
+    mkdir -p "$WORKTREES_BASE"
+
+    # Don't clobber
+    if [[ -e "$DEST" ]]; then
+      echo "error: destination already exists: $DEST"
+      exit 1
+    fi
+
+    # Run from a repo worktree root (works from anywhere)
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    cd "$REPO_ROOT"
+
+    set -x
+    git worktree add -b "$BRANCH" "$DEST" "$START"
+    set +x
+
+    open_tmux_window "$DEST" "$SAFE_BRANCH"
+    ;;
+
+  open)
+    if [[ $# -ne 1 ]]; then usage; fi
+    BRANCH="$1"
+
+    SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+    DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+
+    if [[ ! -d "$DEST" ]]; then
+      echo "error: worktree path does not exist: $DEST"
+      exit 1
+    fi
+
+    open_tmux_window "$DEST" "$SAFE_BRANCH"
+    ;;
+
+  rm|remove|del|delete)
+    ensure_in_git_repo
+
+    FORCE=0
+    DELETE_BRANCH=0
+
+    while getopts ":fd" opt; do
+      case "$opt" in
+        f) FORCE=1 ;;
+        d) DELETE_BRANCH=1 ;;
+        *) usage ;;
+      esac
+    done
+    shift $((OPTIND - 1))
+
+    if [[ $# -ne 1 ]]; then usage; fi
+    BRANCH="$1"
+
+    SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+    DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+
+    if [[ ! -e "$DEST" ]]; then
+      echo "error: worktree path does not exist: $DEST"
+      exit 1
+    fi
+
+    # Prevent "remove the worktree you're standing in"
+    HERE="$(git rev-parse --show-toplevel)"
+    if [[ "$(cd "$DEST" 2>/dev/null && pwd -P)" == "$(cd "$HERE" && pwd -P)" ]]; then
+      echo "error: refusing to remove the current worktree: $DEST"
+      exit 1
+    fi
+
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    cd "$REPO_ROOT"
+
+    set -x
+    if [[ "$FORCE" -eq 1 ]]; then
+      git worktree remove --force "$DEST"
+    else
+      git worktree remove "$DEST"
+    fi
+
+    git worktree prune
+
+    if [[ "$DELETE_BRANCH" -eq 1 ]]; then
+      if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+        git branch -D "$BRANCH"
+      fi
+    fi
+    ;;
+
+  *)
+    usage
+    ;;
+esac
