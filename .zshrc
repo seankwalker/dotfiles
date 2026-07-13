@@ -156,8 +156,27 @@ alias zrc="vi ~/.zshrc"
 alias ghb="GH_TOKEN=$GH_TOKEN_BRANDON gh"
 # alias ide="open /Applications/Cursor.app/"
 
-# Manage dotfiles
-alias dotf="git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME"
+# Manage dotfiles. Keep the Git metadata in ~/.dotfiles while using $HOME as
+# the worktree, including for submodules such as ~/bin/z.
+function dotf {
+    local git_dir="$HOME/.dotfiles/.git"
+    local subcommand="${1:-}"
+
+    if [[ "$subcommand" == "pull" ]]; then
+        shift
+        (
+            cd "$HOME" || exit
+            git --git-dir="$git_dir" --work-tree="$HOME" pull --recurse-submodules "$@" || exit
+            git --git-dir="$git_dir" --work-tree="$HOME" submodule sync --recursive
+            git --git-dir="$git_dir" --work-tree="$HOME" submodule update --init --recursive
+        )
+    else
+        (
+            cd "$HOME" || exit
+            git --git-dir="$git_dir" --work-tree="$HOME" "$@"
+        )
+    fi
+}
 
 alias v="vim_open"
 
@@ -258,7 +277,9 @@ export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 # . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # z
-. $HOME/bin/z/z.sh
+if [[ -r "$HOME/bin/z/z.sh" ]]; then
+    . "$HOME/bin/z/z.sh"
+fi
 
 # pipx
 export PATH="$PATH:/Users/seankwalker/.local/bin"
