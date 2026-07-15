@@ -6,7 +6,7 @@ usage() {
 usage:
   ${0##*/} add  <branch> [start-point]
   ${0##*/} open <branch>
-  ${0##*/} rm   [-f] [-d] <branch>
+  ${0##*/} rm   [-f|--force] [-d] <branch>
 
 env:
   WORKTREES_BASE   (default: \$HOME/Developer/mono-worktrees)
@@ -15,7 +15,7 @@ notes:
   - worktree dir name is branch with '/' replaced by '-'
   - add: if run inside tmux, creates a detached tmux window cd'd into the new worktree
   - open: opens a detached tmux window cd'd into an existing worktree
-  - rm: -f = --force, -d = delete local branch after removing worktree
+  - rm: -f/--force = force-remove the worktree, -d = delete local branch after removing worktree
 EOF
   exit 1
 }
@@ -113,14 +113,31 @@ case "$cmd" in
     FORCE=0
     DELETE_BRANCH=0
 
-    while getopts ":fd" opt; do
-      case "$opt" in
-        f) FORCE=1 ;;
-        d) DELETE_BRANCH=1 ;;
-        *) usage ;;
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        -f|--force)
+          FORCE=1
+          ;;
+        -d)
+          DELETE_BRANCH=1
+          ;;
+        -fd|-df)
+          FORCE=1
+          DELETE_BRANCH=1
+          ;;
+        --)
+          shift
+          break
+          ;;
+        -*)
+          usage
+          ;;
+        *)
+          break
+          ;;
       esac
+      shift
     done
-    shift $((OPTIND - 1))
 
     if [[ $# -ne 1 ]]; then usage; fi
     BRANCH="$1"
