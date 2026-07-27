@@ -8,7 +8,44 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   // AI
+  "indent_guides": {
+    "active_line_width": 1,
+    "line_width": 1
+  },
+  "cli_default_open_behavior": "existing_window",
+  "agent_servers": {
+    "codex-acp": {
+      "favorite_config_option_values": {
+        "model": [
+          "gpt-5.6-luna",
+          "gpt-5.6-sol"
+        ]
+      },
+      "default_config_options": {
+        "model": "gpt-5.6-sol",
+        "fast-mode": true,
+        "reasoning_effort": "high",
+        "mode": "agent-full-access"
+      },
+      "type": "registry"
+    }
+  },
+  "context_servers": {
+    "linear": {
+      "source": "custom",
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
+      "env": {}
+    }
+  },
+  "wrap_guides": [80, 120],
+  "show_wrap_guides": true,
+  "proxy": "",
   "agent": {
+    "notify_when_agent_waiting": "all_screens",
+    "expand_edit_card": false,
+    "expand_terminal_card": false,
+    "thinking_display": "always_collapsed",
     "default_profile": "write",
     "default_model": {
       "provider": "anthropic",
@@ -29,7 +66,7 @@
   "ui_font_family": "JetBrains Mono",
   "buffer_font_family": "JetBrains Mono",
   "theme": {
-    "mode": "system",
+    "mode": "dark",
     "light": "Ariake Dark",
     "dark": "Ariake Dark"
   },
@@ -103,5 +140,17 @@
   "telemetry": {
     "diagnostics": false,
     "metrics": false
+  },
+
+  "languages": {
+    "TypeScript": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "yarn",
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    }
   }
 }
