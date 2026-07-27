@@ -2,7 +2,7 @@
 
 set -eu
 
-repo_url=${DOTFILES_REPO_URL:-https://github.com/seankwalker/dotfiles.git}
+repo_url=${DOTFILES_REPO_URL:-git@github.com:seankwalker/dotfiles.git}
 branch=${DOTFILES_BRANCH:-master}
 git_root=${DOTFILES_GIT_ROOT:-"$HOME/.dotfiles"}
 work_tree=${DOTFILES_WORK_TREE:-"$HOME"}
