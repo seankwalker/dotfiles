@@ -1,0 +1,24 @@
+approvals_reviewer = "user"
+[projects."/Users/sean/Developer/mono"]
+trust_level = "trusted"
+
+[projects."/Users/sean"]
+trust_level = "trusted"
+
+[hooks.state]
+
+[hooks.state."/Users/sean/Developer/mono/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:c0a5f35dbe7d5fa67fa0f45ece9f45ddfc13baaeb028434e43de971dc15b909e"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "context-remaining", "five-hour-limit", "weekly-limit", "fast-mode"]
+status_line_use_colors = true
+
+[features]
+experimental_use_rmcp_client = true # Needed for Linear MCP https://linear.app/docs/mcp#codex
+
+[mcp_servers.notion]
+url = "https://mcp.notion.com/mcp"
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
