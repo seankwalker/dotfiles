@@ -30,14 +30,6 @@
       "type": "registry"
     }
   },
-  "context_servers": {
-    "linear": {
-      "source": "custom",
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
-      "env": {}
-    }
-  },
   "wrap_guides": [80, 120],
   "show_wrap_guides": true,
   "proxy": "",
