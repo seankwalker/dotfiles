@@ -93,11 +93,17 @@ export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# Automatically start tmux, if: it exists, the shell is interactive, and this
-# is not being evaluated in an exisiting session.
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] \
-        && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-    exec tmux
+# Start the main tmux session from a fresh Ghostty shell, but never from a
+# shell that is already running inside tmux.
+if command -v tmux &> /dev/null && [[ -o interactive ]] \
+        && [[ "$TERM_PROGRAM" == "ghostty" ]] && [[ -z "$TMUX" ]]; then
+    if ! tmux has-session -t main 2>/dev/null; then
+        tmux new-session -d -s main -n c -c "$HOME"
+        tmux new-window -t main: -n mono -c "$HOME/Developer/mono"
+        tmux select-window -t main:c
+    fi
+
+    exec tmux attach-session -t main
 fi
 
 

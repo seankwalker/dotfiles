@@ -4,27 +4,57 @@ set -e
 usage() {
   cat <<EOF
 usage:
-  ${0##*/} add  <branch> [start-point]
-  ${0##*/} open <branch>
+  ${0##*/} add  [--no-open] <branch> [start-point]
+  ${0##*/} guidance [worktree-path]
+  ${0##*/} path <branch>
+  ${0##*/} open <branch> [branch ...]
   ${0##*/} rm   [-f|--force] [-d] <branch>
 
 env:
   WORKTREES_BASE   (default: \$HOME/Developer/mono-worktrees)
+  AGENTS_OVERRIDE_TEMPLATE   (default: \$HOME/bin/templates/monorepo-agents-override.md)
 
 notes:
   - worktree dir name is branch with '/' replaced by '-'
-  - add: if run inside tmux, creates a detached tmux window cd'd into the new worktree
-  - open: opens a detached tmux window cd'd into an existing worktree
+  - add: creates a worktree; --no-open skips the tmux window
+  - guidance: regenerates a personal AGENTS.override.md when the repo uses cascade
+  - path: prints the registered filesystem path for a branch's worktree
+  - add without --no-open: requires tmux and opens a detached window
+  - open: opens detached tmux windows cd'd into existing worktrees
   - rm: -f/--force = force-remove the worktree, -d = delete local branch after removing worktree
 EOF
   exit 1
 }
 
 WORKTREES_BASE="${WORKTREES_BASE:-$HOME/Developer/mono-worktrees}"
+AGENTS_OVERRIDE_TEMPLATE="${AGENTS_OVERRIDE_TEMPLATE:-$HOME/bin/templates/monorepo-agents-override.md}"
 
 sanitize_branch() {
   # Option B: flatten slashes
   echo "${1//\//-}"
+}
+
+worktree_path_for_branch() {
+  local branch="$1"
+  local target_ref="refs/heads/$branch"
+  local worktree=""
+  local ref=""
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    case "$line" in
+      "worktree "*) worktree="${line#worktree }" ;;
+      "branch "*)
+        ref="${line#branch }"
+        if [[ "$ref" == "$target_ref" ]]; then
+          printf '%s\n' "$worktree"
+          return 0
+        fi
+        ;;
+      "") worktree=""; ref="" ;;
+    esac
+  done < <(git worktree list --porcelain)
+
+  return 1
 }
 
 ensure_in_git_repo() {
@@ -32,6 +62,43 @@ ensure_in_git_repo() {
     echo "error: not inside a git repo"
     exit 1
   }
+}
+
+generate_personal_agents_override() {
+  local target_dir="$1"
+  local base_file="$target_dir/AGENTS.md"
+  local override_file="$target_dir/AGENTS.override.md"
+  local exclude_file=""
+  local tmp_file=""
+
+  [[ -f "$base_file" ]] || return 0
+  grep -Fxq '## Delegation (cascade)' "$base_file" || return 0
+  [[ -f "$AGENTS_OVERRIDE_TEMPLATE" ]] || {
+    echo "error: AGENTS override template not found: $AGENTS_OVERRIDE_TEMPLATE" >&2
+    return 1
+  }
+
+  exclude_file="$(git -C "$target_dir" rev-parse --git-path info/exclude)"
+  if [[ "$exclude_file" != /* ]]; then
+    exclude_file="$target_dir/$exclude_file"
+  fi
+  if ! grep -Fxq '/AGENTS.override.md' "$exclude_file"; then
+    printf '\n/AGENTS.override.md\n' >> "$exclude_file"
+  fi
+
+  tmp_file="$(mktemp "$target_dir/.AGENTS.override.md.XXXXXX")"
+  {
+    head -n 1 "$base_file"
+    printf '\n'
+    cat "$AGENTS_OVERRIDE_TEMPLATE"
+    awk '
+      NR == 1 { next }
+      /^## Delegation \(cascade\)[[:space:]]*$/ { skipping = 1; next }
+      skipping && /^## / { skipping = 0 }
+      !skipping { print }
+    ' "$base_file"
+  } > "$tmp_file"
+  mv "$tmp_file" "$override_file"
 }
 
 open_tmux_window() {
@@ -66,6 +133,12 @@ case "$cmd" in
   add)
     ensure_in_git_repo
 
+    NO_OPEN=0
+    if [[ "${1:-}" == "--no-open" ]]; then
+      NO_OPEN=1
+      shift
+    fi
+
     if [[ $# -lt 1 || $# -gt 2 ]]; then usage; fi
     BRANCH="$1"
     START="${2:-main}"
@@ -74,6 +147,11 @@ case "$cmd" in
     DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
 
     mkdir -p "$WORKTREES_BASE"
+
+    if EXISTING_PATH="$(worktree_path_for_branch "$BRANCH")"; then
+      echo "error: branch already has a worktree: $EXISTING_PATH"
+      exit 1
+    fi
 
     # Don't clobber
     if [[ -e "$DEST" ]]; then
@@ -86,25 +164,70 @@ case "$cmd" in
     cd "$REPO_ROOT"
 
     set -x
-    git worktree add -b "$BRANCH" "$DEST" "$START"
+    if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+      git worktree add "$DEST" "$BRANCH"
+    else
+      git worktree add -b "$BRANCH" "$DEST" "$START"
+    fi
     set +x
 
-    open_tmux_window "$DEST" "$SAFE_BRANCH"
+    generate_personal_agents_override "$DEST"
+
+    printf '%s\n' "$DEST"
+    if [[ "$NO_OPEN" -eq 0 ]]; then
+      open_tmux_window "$DEST" "$SAFE_BRANCH"
+    fi
+    ;;
+
+  guidance)
+    if [[ $# -gt 1 ]]; then usage; fi
+
+    if [[ $# -eq 1 ]]; then
+      DEST="$1"
+      [[ -d "$DEST" ]] || {
+        echo "error: worktree path does not exist: $DEST"
+        exit 1
+      }
+      DEST="$(git -C "$DEST" rev-parse --show-toplevel)"
+    else
+      ensure_in_git_repo
+      DEST="$(git rev-parse --show-toplevel)"
+    fi
+
+    generate_personal_agents_override "$DEST"
+    printf '%s\n' "$DEST/AGENTS.override.md"
+    ;;
+
+  path)
+    ensure_in_git_repo
+    if [[ $# -ne 1 ]]; then usage; fi
+
+    if ! worktree_path_for_branch "$1"; then
+      echo "error: branch does not have a worktree: $1" >&2
+      exit 1
+    fi
     ;;
 
   open)
-    if [[ $# -ne 1 ]]; then usage; fi
-    BRANCH="$1"
+    if [[ $# -lt 1 ]]; then usage; fi
 
-    SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
-    DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+    # Validate every path first so a bad argument does not leave only some of
+    # the requested windows open.
+    for BRANCH in "$@"; do
+      SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+      DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
 
-    if [[ ! -d "$DEST" ]]; then
-      echo "error: worktree path does not exist: $DEST"
-      exit 1
-    fi
+      if [[ ! -d "$DEST" ]]; then
+        echo "error: worktree path does not exist: $DEST"
+        exit 1
+      fi
+    done
 
-    open_tmux_window "$DEST" "$SAFE_BRANCH"
+    for BRANCH in "$@"; do
+      SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+      DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+      open_tmux_window "$DEST" "$SAFE_BRANCH"
+    done
     ;;
 
   rm|remove|del|delete)
