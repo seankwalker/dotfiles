@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Worktree Management"
+  short_description: "Manage Linear task worktrees with local aliases"
+  default_prompt: "Use $git-worktree-management to create or open a worktree for this Linear issue."

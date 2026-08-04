@@ -1,0 +1,4 @@
+interface:
+  display_name: "Close Out Day"
+  short_description: "Turn a daily note into a useful closeout"
+  default_prompt: "Use $close-out-day to close out today and prepare tomorrow."

@@ -1,4 +1,10 @@
 approvals_reviewer = "user"
+
+plan_mode_reasoning_effort = "xhigh"
+service_tier = "fast"
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+
 [projects."/Users/sean/Developer/mono"]
 trust_level = "trusted"
 
@@ -11,8 +17,13 @@ trust_level = "trusted"
 trusted_hash = "sha256:c0a5f35dbe7d5fa67fa0f45ece9f45ddfc13baaeb028434e43de971dc15b909e"
 
 [tui]
-status_line = ["model-with-reasoning", "current-dir", "context-remaining", "five-hour-limit", "weekly-limit", "fast-mode"]
+notifications = true
+status_line = ["model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit", "fast-mode"]
 status_line_use_colors = true
+vim_mode_default = true
+
+[tui.model_availability_nux]
+"gpt-5.6-sol" = 3
 
 [features]
 experimental_use_rmcp_client = true # Needed for Linear MCP https://linear.app/docs/mcp#codex
@@ -22,3 +33,6 @@ url = "https://mcp.notion.com/mcp"
 
 [mcp_servers.linear]
 url = "https://mcp.linear.app/mcp"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
