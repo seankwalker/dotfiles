@@ -9,14 +9,14 @@ Run the full helper path from within the relevant Git repository. Shell aliases 
 
 1. Resolve an existing worktree with `~/bin/git-manage-worktree path <branch>`.
 2. If it exists, use the printed path as the explicit `workdir` on every subsequent tool call. Do not narrate this routine lookup.
-3. If it does not exist, create it with `~/bin/git-manage-worktree add --no-open <branch> [start-point]`, mention the creation briefly, and use the printed path as `workdir` thereafter.
+3. If it does not exist, create it with `~/bin/git-manage-worktree add <branch> [start-point]`, mention the creation briefly, and use the printed path as `workdir` thereafter.
 
 For Linear work, pass the suggested Git branch name verbatim. `add` attaches an existing local branch when present; otherwise it creates the branch from `main` by default. Provide `[start-point]` only when a new branch requires another base. Worktree directory names flatten `/` to `-`, but always use the path printed by `path` or `add` rather than reconstructing it.
 
 Working directories do not persist between tool calls. Setting `cd` in one command has no effect on the next, so pass the resolved worktree path as `workdir` every time.
 
-`~/bin/git-manage-worktree open` is only a human terminal convenience: it opens a tmux window and neither changes Codex's working directory nor works outside tmux. Codex must not call it.
+Worktree creation does not open a UI by default. Humans can pass `-t`/`--tmux` to open the new worktree in a detached tmux window, `-z`/`--zed` to run `zed <worktree-path>`, or both. `~/bin/git-manage-worktree open` remains a human terminal convenience for reopening existing work: it opens a side-by-side tmux window with `codex resume` on the left and an idle worktree shell on the right. These launchers do not change Codex's working directory; Codex must not call them unless the user explicitly requests opening an application or tmux window.
 
-Treat removal as destructive. Never run `~/bin/git-manage-worktree rm`, with or without `-d`, unless the user explicitly authorizes removal. A completed ticket alone is not authorization. The `-d` form also force-deletes the local branch. Mention worktree handling only when creating one, requesting destructive authorization, or reporting a genuine blocker.
+Treat removal as destructive. Never run `~/bin/git-manage-worktree rm`, with or without `-d`, unless the user explicitly authorizes removal. A completed ticket alone is not authorization. The command accepts multiple branches in one batch (`rm -d <branch> [branch ...]`); flags apply to every target, and `-d` also force-deletes each local branch. Mention worktree handling only when creating one, requesting destructive authorization, or reporting a genuine blocker.
 
 Do not switch branches in the parent worktree or create/remove anything during lookup. Consult `~/bin/git-manage-worktree` if exact behavior or error handling matters.

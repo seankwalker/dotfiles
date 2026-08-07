@@ -11,13 +11,33 @@ trust_level = "trusted"
 [projects."/Users/sean"]
 trust_level = "trusted"
 
+[projects."/Users/sean/Developer/orgloop"]
+trust_level = "trusted"
+
+[projects."/Users/sean/Developer/decrypt"]
+trust_level = "trusted"
+
+[projects."/Users/sean/Developer/mcp"]
+trust_level = "trusted"
+
 [hooks.state]
 
 [hooks.state."/Users/sean/Developer/mono/.codex/hooks.json:stop:0:0"]
 trusted_hash = "sha256:c0a5f35dbe7d5fa67fa0f45ece9f45ddfc13baaeb028434e43de971dc15b909e"
 
+[hooks.state."/Users/sean/Developer/mcp/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:93ab683e6637a30945c1a11d8c1c69b6b805a5e16b08c68ca36963fad1489a1f"
+
+[hooks.state."/Users/sean/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:a006a1d83f11de9eb6faf8c2888a0e936c9e27557a35ea7d5c2d21b1877d57b7"
+
+[hooks.state."/Users/sean/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:4554e908d9f06d3da51ddba1c0502152063afaba6d43c74835dc60626c319d94"
+
 [tui]
 notifications = true
+notification_method = "bel"
+notification_condition = "always"
 status_line = ["model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit", "fast-mode"]
 status_line_use_colors = true
 vim_mode_default = true

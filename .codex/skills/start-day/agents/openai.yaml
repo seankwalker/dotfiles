@@ -2,3 +2,5 @@ interface:
   display_name: "Start Day"
   short_description: "Turn recent notes into a focused daily plan"
   default_prompt: "Use $start-day to set today’s outcomes and concrete tasks."
+policy:
+  allow_implicit_invocation: false

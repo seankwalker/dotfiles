@@ -1,0 +1,6 @@
+interface:
+  display_name: "Review MCP PRs"
+  short_description: "Audit Kindo MCP pull requests safely"
+  default_prompt: "Use $review-mcp-prs to audit these Kindo MCP PRs read-only: <PR URLs or numbers>."
+policy:
+  allow_implicit_invocation: false

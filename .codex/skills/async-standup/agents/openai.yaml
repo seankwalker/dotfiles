@@ -1,0 +1,4 @@
+interface:
+  display_name: "Async Standup"
+  short_description: "Draft a concise morning Slack team update"
+  default_prompt: "Use $async-standup to draft today’s ready-to-post Slack update."

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Work on Issue"
+  short_description: "Research, implement, and verify a Linear issue"
+  default_prompt: "Use $work-on-issue to research and start or resume the Linear issue for this worktree, choosing whether to execute, experiment, or request a decision before preparing a verified handoff."
+policy:
+  allow_implicit_invocation: false
