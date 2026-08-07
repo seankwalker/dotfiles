@@ -4,11 +4,11 @@ set -e
 usage() {
   cat <<EOF
 usage:
-  ${0##*/} add  [--no-open] <branch> [start-point]
+  ${0##*/} add  [-t|--tmux] [-z|--zed] <branch> [start-point]
   ${0##*/} guidance [worktree-path]
   ${0##*/} path <branch>
   ${0##*/} open <branch> [branch ...]
-  ${0##*/} rm   [-f|--force] [-d] <branch>
+  ${0##*/} rm   [-f|--force] [-d] <branch> [branch ...]
 
 env:
   WORKTREES_BASE   (default: \$HOME/Developer/mono-worktrees)
@@ -16,12 +16,13 @@ env:
 
 notes:
   - worktree dir name is branch with '/' replaced by '-'
-  - add: creates a worktree; --no-open skips the tmux window
+  - add: creates a worktree without opening it by default
+  - add --tmux: opens the new worktree in a detached tmux window
+  - add --zed: opens the new worktree with 'zed <path>'
   - guidance: regenerates a personal AGENTS.override.md when the repo uses cascade
   - path: prints the registered filesystem path for a branch's worktree
-  - add without --no-open: requires tmux and opens a detached window
-  - open: opens detached tmux windows cd'd into existing worktrees
-  - rm: -f/--force = force-remove the worktree, -d = delete local branch after removing worktree
+  - open: opens detached tmux windows with Codex resume on the left and a shell on the right
+  - rm: flags apply to every branch; -f/--force = force-remove, -d = delete local branch
 EOF
   exit 1
 }
@@ -126,6 +127,49 @@ open_tmux_window() {
   tmux new-window -d -n "$name" "cd \"${dir}\" && exec \"${SHELL:-/bin/bash}\""
 }
 
+open_zed_worktree() {
+  local dir="$1"
+
+  command -v zed >/dev/null 2>&1 || {
+    echo "error: zed not found"
+    exit 1
+  }
+
+  zed "$dir"
+}
+
+open_tmux_resume_window() {
+  local dir="$1"
+  local name="$2"
+  local left_pane=""
+
+  # Only do this when the script is run inside tmux.
+  [[ -n "${TMUX:-}" ]] || {
+    echo "error: not inside tmux"
+    exit 1
+  }
+
+  command -v tmux >/dev/null 2>&1 || {
+    echo "error: tmux not found"
+    exit 1
+  }
+
+  # A vertical divider is a horizontal tmux split. Both panes start in the
+  # worktree; the left opens Codex's cwd-filtered resume picker.
+  if ! left_pane="$(tmux new-window -d -P -F '#{pane_id}' -c "$dir" -n "$name")"; then
+    echo "error: failed to create tmux window for $dir" >&2
+    exit 1
+  fi
+
+  if ! tmux split-window -d -h -p 50 -t "$left_pane" -c "$dir"; then
+    echo "error: failed to split tmux window for $dir" >&2
+    exit 1
+  fi
+
+  tmux send-keys -t "$left_pane" 'codex resume' C-m
+  tmux select-pane -t "$left_pane"
+}
+
 cmd="${1:-}"
 shift || true
 
@@ -133,11 +177,33 @@ case "$cmd" in
   add)
     ensure_in_git_repo
 
-    NO_OPEN=0
-    if [[ "${1:-}" == "--no-open" ]]; then
-      NO_OPEN=1
+    OPEN_TMUX=0
+    OPEN_ZED=0
+
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        -t|--tmux)
+          OPEN_TMUX=1
+          ;;
+        -z|--zed)
+          OPEN_ZED=1
+          ;;
+        --no-open)
+          # Backward-compatible no-op now that opening is opt-in.
+          ;;
+        --)
+          shift
+          break
+          ;;
+        -*)
+          usage
+          ;;
+        *)
+          break
+          ;;
+      esac
       shift
-    fi
+    done
 
     if [[ $# -lt 1 || $# -gt 2 ]]; then usage; fi
     BRANCH="$1"
@@ -174,8 +240,11 @@ case "$cmd" in
     generate_personal_agents_override "$DEST"
 
     printf '%s\n' "$DEST"
-    if [[ "$NO_OPEN" -eq 0 ]]; then
+    if [[ "$OPEN_TMUX" -eq 1 ]]; then
       open_tmux_window "$DEST" "$SAFE_BRANCH"
+    fi
+    if [[ "$OPEN_ZED" -eq 1 ]]; then
+      open_zed_worktree "$DEST"
     fi
     ;;
 
@@ -226,7 +295,7 @@ case "$cmd" in
     for BRANCH in "$@"; do
       SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
       DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
-      open_tmux_window "$DEST" "$SAFE_BRANCH"
+      open_tmux_resume_window "$DEST" "$SAFE_BRANCH"
     done
     ;;
 
@@ -262,41 +331,57 @@ case "$cmd" in
       shift
     done
 
-    if [[ $# -ne 1 ]]; then usage; fi
-    BRANCH="$1"
+    if [[ $# -lt 1 ]]; then usage; fi
+    BRANCHES=("$@")
 
-    SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
-    DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
-
-    if [[ ! -e "$DEST" ]]; then
-      echo "error: worktree path does not exist: $DEST"
-      exit 1
-    fi
-
-    # Prevent "remove the worktree you're standing in"
+    # Validate every target first so one bad argument does not leave only part
+    # of the requested batch removed.
     HERE="$(git rev-parse --show-toplevel)"
-    if [[ "$(cd "$DEST" 2>/dev/null && pwd -P)" == "$(cd "$HERE" && pwd -P)" ]]; then
-      echo "error: refusing to remove the current worktree: $DEST"
-      exit 1
-    fi
+    SEEN_BRANCHES=$'\n'
+    for BRANCH in "${BRANCHES[@]}"; do
+      if [[ "$SEEN_BRANCHES" == *$'\n'"$BRANCH"$'\n'* ]]; then
+        echo "error: duplicate branch: $BRANCH"
+        exit 1
+      fi
+      SEEN_BRANCHES+="$BRANCH"$'\n'
+
+      SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+      DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+
+      if [[ ! -e "$DEST" ]]; then
+        echo "error: worktree path does not exist: $DEST"
+        exit 1
+      fi
+
+      # Prevent "remove the worktree you're standing in".
+      if [[ "$(cd "$DEST" 2>/dev/null && pwd -P)" == "$(cd "$HERE" && pwd -P)" ]]; then
+        echo "error: refusing to remove the current worktree: $DEST"
+        exit 1
+      fi
+    done
 
     REPO_ROOT="$(git rev-parse --show-toplevel)"
     cd "$REPO_ROOT"
 
     set -x
-    if [[ "$FORCE" -eq 1 ]]; then
-      git worktree remove --force "$DEST"
-    else
-      git worktree remove "$DEST"
-    fi
+    for BRANCH in "${BRANCHES[@]}"; do
+      SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
+      DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
+
+      if [[ "$FORCE" -eq 1 ]]; then
+        git worktree remove --force "$DEST"
+      else
+        git worktree remove "$DEST"
+      fi
+
+      if [[ "$DELETE_BRANCH" -eq 1 ]]; then
+        if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+          git branch -D "$BRANCH"
+        fi
+      fi
+    done
 
     git worktree prune
-
-    if [[ "$DELETE_BRANCH" -eq 1 ]]; then
-      if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
-        git branch -D "$BRANCH"
-      fi
-    fi
     ;;
 
   *)
