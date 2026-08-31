@@ -7,7 +7,7 @@ usage:
   ${0##*/} add  [-t|--tmux] [-z|--zed] <branch> [start-point]
   ${0##*/} guidance [worktree-path]
   ${0##*/} path <branch>
-  ${0##*/} open <branch> [branch ...]
+  ${0##*/} open [-t|--tmux] [-z|--zed] <branch> [branch ...]
   ${0##*/} rm   [-f|--force] [-d] <branch> [branch ...]
 
 env:
@@ -21,7 +21,9 @@ notes:
   - add --zed: opens the new worktree with 'zed <path>'
   - guidance: regenerates a personal AGENTS.override.md when the repo uses cascade
   - path: prints the registered filesystem path for a branch's worktree
-  - open: opens detached tmux windows with Codex resume on the left and a shell on the right
+  - open --zed: opens existing worktrees with 'zed <path>'
+  - open --tmux: opens detached tmux windows with Codex resume on the left and a shell on the right
+  - open: defaults to --tmux for backward compatibility; --zed and --tmux may be combined
   - rm: flags apply to every branch; -f/--force = force-remove, -d = delete local branch
 EOF
   exit 1
@@ -278,11 +280,41 @@ case "$cmd" in
     ;;
 
   open)
+    OPEN_ZED=0
+    OPEN_TMUX=0
+
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        -t|--tmux)
+          OPEN_TMUX=1
+          ;;
+        -z|--zed)
+          OPEN_ZED=1
+          ;;
+        --)
+          shift
+          break
+          ;;
+        -*)
+          usage
+          ;;
+        *)
+          break
+          ;;
+      esac
+      shift
+    done
+
     if [[ $# -lt 1 ]]; then usage; fi
+    BRANCHES=("$@")
+
+    if [[ "$OPEN_ZED" -eq 0 && "$OPEN_TMUX" -eq 0 ]]; then
+      OPEN_TMUX=1
+    fi
 
     # Validate every path first so a bad argument does not leave only some of
     # the requested windows open.
-    for BRANCH in "$@"; do
+    for BRANCH in "${BRANCHES[@]}"; do
       SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
       DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
 
@@ -292,10 +324,15 @@ case "$cmd" in
       fi
     done
 
-    for BRANCH in "$@"; do
+    for BRANCH in "${BRANCHES[@]}"; do
       SAFE_BRANCH="$(sanitize_branch "$BRANCH")"
       DEST="${WORKTREES_BASE}/${SAFE_BRANCH}"
-      open_tmux_resume_window "$DEST" "$SAFE_BRANCH"
+      if [[ "$OPEN_ZED" -eq 1 ]]; then
+        open_zed_worktree "$DEST"
+      fi
+      if [[ "$OPEN_TMUX" -eq 1 ]]; then
+        open_tmux_resume_window "$DEST" "$SAFE_BRANCH"
+      fi
     done
     ;;
 

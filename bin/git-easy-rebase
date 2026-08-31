@@ -1,15 +1,30 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-    echo "usage: ${0} upstream"
+    echo "usage: ${0##*/} upstream" >&2
     exit 1
 fi
 
 upstream=$1
-branch=$(git rev-parse --abbrev-ref HEAD)
+branch=$(git symbolic-ref --quiet --short HEAD) || {
+    echo "error: cannot rebase from a detached HEAD" >&2
+    exit 1
+}
 
-set -x
+tracking_ref=$(git rev-parse --abbrev-ref --symbolic-full-name "$upstream@{upstream}" 2>/dev/null) || {
+    echo "error: $upstream does not have a configured upstream" >&2
+    exit 1
+}
 
-git checkout $upstream && git pull -p && git checkout $branch && git rebase $upstream
+remote=$(git config --get "branch.$upstream.remote") || {
+    echo "error: could not determine the remote for $upstream" >&2
+    exit 1
+}
+
+echo "Fetching $tracking_ref"
+git fetch --prune "$remote"
+
+echo "Rebasing $branch onto $tracking_ref"
+git rebase "$tracking_ref"
