@@ -3,7 +3,7 @@
 ######################################
 
 # Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME=skw
@@ -155,10 +155,10 @@ alias yt="yarn test:local --coverage=false"
 alias tf="terraform"
 
 # Shortcuts
-alias trc="vi ~/.config/ghostty/config" # "Terminal rc"
-alias vrc="vi ~/.vimrc"
-alias zource=". ~/.zshrc"
-alias zrc="vi ~/.zshrc"
+alias trc="vi $HOME/.config/ghostty/config" # "Terminal rc"
+alias vrc="vi $HOME/.vimrc"
+alias zource=". $HOME/.zshrc"
+alias zrc="vi $HOME/.zshrc"
 alias ghb="GH_TOKEN=$GH_TOKEN_BRANDON gh"
 # alias ide="open /Applications/Cursor.app/"
 
@@ -202,7 +202,7 @@ alias gdc="git diff --cached"
 alias gdp="git-diff-prev"   # Diff between commit and its parent
 alias gl="git pull -p"
 alias glg="git-pretty-log"  # h/t Gary Bernhardt
-alias gpf="git push -f"
+alias gpf="git push --force-with-lease"
 alias gpo="git-quick-push"  # push to upstream with current branch name
 alias gr="git-easy-rebase"  # update specified branch then rebase onto
 alias grc="git rebase --continue"
@@ -310,7 +310,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(mise activate zsh)"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sean/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sean/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/.local/share/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/sean/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sean/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
