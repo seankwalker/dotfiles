@@ -5,7 +5,7 @@ description: Draft a concise, ready-to-post async Slack standup from the settled
 
 # Async Standup
 
-Draft a team-relevant snapshot of recent progress, today's intended outcomes, and anything likely to affect the plan.
+Draft a team-relevant snapshot of recent progress, today's intended outcomes, and any active blockers.
 
 ## Gather context
 
@@ -17,23 +17,23 @@ Draft a team-relevant snapshot of recent progress, today's intended outcomes, an
 
 ## Draft the update
 
-Use this Slack-friendly shape, omitting an empty section:
+Use this exact Slack-friendly shape:
 
 ```text
-*Yesterday*
+:rewind: Yesterday:
 - <one or two meaningful shipped, verified, or decided outcomes>
 
-*Today*
+:arrow_forward: Today:
 - <one to three outcome-oriented priorities>
 
-*Heads-up*
-- <on-call duty, availability, blocker, dependency, or meaningful risk>
+:octagonal_sign: Blockers:
+- <active blocker, or "None">
 ```
 
 Keep the complete update around 60–120 words and ready to paste without editing. Prefer plain language over internal task mechanics. Include Linear identifiers or links when they help teammates follow the work. Consolidate related tasks into an outcome rather than copying the checklist verbatim.
 
 Use a literal ASCII hyphen followed by a space (`- `) for every bullet so Slack formats pasted updates consistently. Do not use Unicode bullet characters.
 
-Mention stretch work only when it is likely to receive attention. Treat on-call duty or interruptions as capacity context, not as an apology. Include a blocker only when one actually exists.
+Mention stretch work only when it is likely to receive attention. Treat on-call duty or interruptions as capacity context, not as an apology. Keep `Blockers` limited to something actively preventing a listed outcome; write `- None` when there is no blocker.
 
 Draft only. Do not post to Slack or edit the daily note unless the user explicitly asks. If the plan changes materially, rerun the skill to produce a fresh snapshot.

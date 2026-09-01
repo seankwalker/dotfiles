@@ -1,6 +1,6 @@
 interface:
   display_name: "Start Day"
-  short_description: "Turn recent notes into a focused daily plan"
-  default_prompt: "Use $start-day to set today’s outcomes and concrete tasks."
+  short_description: "Challenge your assessment and plan the day"
+  default_prompt: "Use $start-day to challenge my morning assessment and build today’s plan around one must-win."
 policy:
   allow_implicit_invocation: false

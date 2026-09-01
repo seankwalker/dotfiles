@@ -14,6 +14,18 @@ CUTOFF_EPOCH="${2:-$(date +%s)}"
 [[ "$SYNC_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || usage
 [[ "$CUTOFF_EPOCH" =~ ^[0-9]+$ ]] || usage
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [[ "${SYNC_WORK_SOURCE:-prefer-orgloop}" != "sqlite" ]]; then
+  if "$SCRIPT_DIR/orgloop-deltas.sh" "$SYNC_DATE" "$CUTOFF_EPOCH"; then
+    exit 0
+  fi
+  if [[ "${SYNC_WORK_SOURCE:-prefer-orgloop}" == "orgloop" ]]; then
+    echo "error: Orgloop inbox is unavailable" >&2
+    exit 1
+  fi
+  echo "warning: Orgloop inbox unavailable; falling back to Codex SQLite" >&2
+fi
+
 parse_local_midnight() {
   local value="$1"
   if TZ=America/Los_Angeles date -j -f '%Y-%m-%d %H:%M:%S' "$value 00:00:00" '+%s' 2>/dev/null; then

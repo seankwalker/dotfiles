@@ -1,6 +1,6 @@
 interface:
   display_name: "Work on Issue"
-  short_description: "Research, implement, and verify a Linear issue"
-  default_prompt: "Use $work-on-issue to research and start or resume the Linear issue for this worktree, choosing whether to execute, experiment, or request a decision before preparing a verified handoff."
+  short_description: "Plan, implement, and prepare an issue for review"
+  default_prompt: "Use $work-on-issue to research and start or resume the Linear issue for this worktree, route substantial work through design, implement accepted work, and return a verified handoff for local review in Zed."
 policy:
   allow_implicit_invocation: false

@@ -1,11 +1,11 @@
 ---
 name: close-out-day
-description: Close out a workday from an Obsidian daily note by reconciling every planned and captured item, assessing outcomes, reviewing unsynced dotfile changes, proposing tomorrow's outcomes, and auditing Codex sessions active that day for workflow friction.
+description: Close out a workday by first preserving Sean's independent reflection, then reconciling the Obsidian daily note, worker evidence, commitments, dotfile state, and Codex workflow. Use when Sean asks to close out or reflect on the workday.
 ---
 
 # Close Out Day
 
-Use the daily note as the source of truth. First perform the final worker sync, then reconcile the day's plan and inbox before producing the closeout.
+Preserve Sean's account of the day before generating a machine synthesis. Then use the daily note and worker evidence to challenge and complete that account without replacing it.
 
 ## Locate the note
 
@@ -13,6 +13,17 @@ Use the daily note as the source of truth. First perform the final worker sync, 
 2. Otherwise use the current local date in `America/Los_Angeles` and open:
    `/Users/sean/Documents/Obsidian Vault/daily/YYYY-MM-DD.md`
 3. If the note is missing or the intended date is ambiguous, ask for the path or date.
+
+## Require Sean's reflection
+
+Before performing the final sync or summarizing the day, require a substantive `## Reflection` in the daily note or a reflection supplied by Sean in the current conversation. It must answer:
+
+- What did I actually accomplish?
+- What was the most important judgment or decision I made?
+- Where did I fail to act according to my intentions?
+- What do I currently believe matters most tomorrow?
+
+If it is missing, stop and ask Sean to write it. Do not propose answers or summarize the day first. If Sean supplies it in the conversation, record it faithfully under `## Reflection` immediately before `## Closeout`, making only formatting changes. Preserve the reflection exactly after it is recorded.
 
 ## Perform the final sync
 
@@ -69,6 +80,7 @@ Tell each auditor to:
 - pipe the compact activity summary through targeted `jq` or `rg` queries instead of printing the entire object, then inspect raw rollout files only to establish evidence;
 - report the task outcome and each material friction episode with symptom, cause, impact, and recovery;
 - distinguish avoidable friction from normal implementation, external failures, and justified waiting;
+- note any consequential priority, product, or architecture judgment that Codex made or obscured instead of surfacing to Sean;
 - report explicitly when no material friction occurred;
 - propose at most two concrete improvements.
 
@@ -79,6 +91,10 @@ The cutoff prevents the audit from recursively analyzing its own subagents. If s
 Read the entire note, then replace the contents beneath `## Closeout` with:
 
 ```markdown
+### Ownership check
+- <where Sean's reflection and the evidence agree>
+- <material discrepancy, rationalization, overlooked progress, or displaced judgment>
+
 ### Outcome status
 - **<outcome>** — Achieved | Partial | Not started
   - <brief evidence or remaining gap>
@@ -107,6 +123,7 @@ Read the entire note, then replace the contents beneath `## Closeout` with:
 - **Sessions audited:** <count>
 - **Recurring friction:** <pattern seen in at least two root sessions, or none>
 - **Other observations:** <material one-off finding or explicit no-friction result>
+- **Judgment ownership:** <where Codex increased leverage appropriately or displaced judgment Sean should have exercised>
 - **Candidate improvement:** <smallest change worth trying>
 ```
 
@@ -115,14 +132,16 @@ Omit empty subsections. Propose at most three outcomes for tomorrow.
 ## Rules
 
 - Base completion on checked tasks or clear log evidence. Do not invent accomplishments.
+- Compare Sean's reflection with the plan, log, worker evidence, and commitments. Highlight discrepancies, rationalizations, and unrecognized progress concisely.
+- Do not overwrite Sean's interpretation. Preserve both accounts when they disagree.
 - Treat a mention of work as activity, not proof of completion.
 - Preserve normal completion semantics for `Outcomes` and `Other tasks`; never check an unfinished task merely because it was carried forward.
-- Frame tomorrow's outcomes as changed states; place tickets and actions beneath them.
+- Start tomorrow's proposed outcomes from what Sean says matters most, then challenge it explicitly when the evidence indicates a materially stronger priority. Frame outcomes as changed states and place tickets and actions beneath them.
 - Do not blindly carry every unchecked task forward. Keep only work that remains relevant.
 - Separate work that can be acted on from work waiting on another person, system, or decision.
 - Keep per-session audit findings even when no pattern recurred that day. Label a daily pattern recurring only when it appears in at least two root sessions.
 - Summarize workflow evidence; never copy raw session logs or potentially sensitive command output into the note.
-- Outside the final sync and the checkbox and destination reconciliation above, preserve every section above `## Closeout` exactly.
+- Outside the final sync and the checkbox and destination reconciliation above, preserve every section above `## Closeout` exactly, especially `## Morning assessment` and `## Reflection`.
 - Keep the closeout concise and point out material ambiguity instead of hiding it.
 - After editing, report the note path and any decisions the user still needs to make.
 - End by suggesting: “Tomorrow morning, use `$start-day` to build the next plan from this closeout.” Do not invoke `$start-day` immediately unless the user explicitly requests it for a specified date.

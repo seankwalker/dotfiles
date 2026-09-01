@@ -1,6 +1,6 @@
 interface:
   display_name: "Sync Work"
-  short_description: "Sync worker progress into today’s daily note"
-  default_prompt: "Use $sync-work to reconcile worker-session progress into today’s daily note."
+  short_description: "Reconcile worker progress when requested"
+  default_prompt: "Use $sync-work to produce a factual worker ledger and reconcile meaningful state changes into today’s daily note without reprioritizing the day."
 policy:
   allow_implicit_invocation: false

@@ -1,6 +1,6 @@
 interface:
   display_name: "Close Out Day"
-  short_description: "Close the day and audit Codex workflow friction"
-  default_prompt: "Use $close-out-day to close out today, audit Codex workflow friction, and prepare tomorrow."
+  short_description: "Compare your reflection with the day’s evidence"
+  default_prompt: "Use $close-out-day to compare my reflection with today’s evidence and prepare tomorrow."
 policy:
   allow_implicit_invocation: false

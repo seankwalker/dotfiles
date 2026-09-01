@@ -21,4 +21,5 @@ TMP_FILE="$(mktemp "$STATE_DIR/.${SYNC_DATE}.cursor.XXXXXX")"
 trap 'rm -f "$TMP_FILE"' EXIT
 printf '%s\n' "$CUTOFF_EPOCH" > "$TMP_FILE"
 mv "$TMP_FILE" "$STATE_DIR/$SYNC_DATE.cursor"
+rm -f "$STATE_DIR/$SYNC_DATE.orgloop-pending.json"
 trap - EXIT

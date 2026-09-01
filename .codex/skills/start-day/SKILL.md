@@ -1,11 +1,11 @@
 ---
 name: start-day
-description: Build a focused workday plan from recent Obsidian daily notes by reviewing the most recent closeout, preserving today's commitments, choosing one to three outcomes, and placing granular tasks beneath them.
+description: Challenge Sean's independent morning assessment against recent Obsidian notes and available commitments, then build a focused plan with one explicit must-win outcome. Use when Sean asks to plan or start the workday.
 ---
 
 # Start Day
 
-Build a focused plan in today's daily note. Treat outcomes as desired state changes and tasks as the concrete work expected to produce them.
+Build a focused plan from Sean's judgment about the day. Act as an adversarial planning partner, not the source of priorities.
 
 ## Locate the notes
 
@@ -16,31 +16,51 @@ Build a focused plan in today's daily note. Treat outcomes as desired state chan
 4. Read the most recent earlier daily note, preferring the previous calendar day. Read its full plan and `Captured` inbox as a safety check, then focus on its `## Closeout` section.
 5. If today's note does not exist, create it from `templates/daily.md`. Never overwrite an existing note.
 
+## Require Sean's assessment
+
+Before proposing or refining priorities, require a substantive `## Morning assessment` in today's note or an assessment supplied by Sean in the current conversation. It must state:
+
+- where the important work stands;
+- what matters most today;
+- why it matters; and
+- Sean's proposed must-win outcome.
+
+If it is missing, stop and ask Sean to write it. Do not suggest priorities or draft the assessment first. If Sean supplies it in the conversation, record it faithfully under `## Morning assessment`, making only formatting changes. Preserve an existing assessment exactly.
+
+## Challenge the assessment
+
+Compare Sean's assessment with:
+
+- the prior closeout, especially carry-forward work, waiting items, and proposed outcomes;
+- any unchecked prior `Captured` entry or planned task not accounted for by the prior closeout;
+- today's existing outcomes, tasks, captured commitments, and log;
+- relevant commitments stated in the current conversation; and
+- available evidence about deadlines, dependencies, or current Linear state when it could change the plan.
+
+Test for neglected higher-value work, weak assumptions, unnecessary scope, avoidance of a difficult decision, and activity that does not advance the intended outcome. State material disagreements explicitly. If resolving one requires Sean's judgment, ask for the decision before editing the plan. Do not silently replace his priorities.
+
 ## Build the plan
 
-Read:
+After the assessment and any consequential disagreement are settled, update today's note:
 
-- The prior closeout, especially carry-forward work, waiting items, and proposed outcomes.
-- Any unchecked prior `Captured` entry or planned task not accounted for by the prior closeout.
-- Today's existing outcomes, tasks, and captured commitments.
-- Relevant commitments stated by the user in the current conversation.
-
-Then update today's note:
-
-1. Set one to three outcomes under `## Outcomes`.
+1. Set one to three outcomes under `## Outcomes`, with exactly one marked `Must-win`.
 2. Put granular Linear issues and concrete actions beneath the outcome they support.
 3. Keep standalone obligations under `## Other tasks`.
-4. Preserve `## Log`, `## Captured`, and `## Closeout` exactly.
+4. Preserve `## Morning assessment`, `## Log`, `## Captured`, `## Reflection`, and `## Closeout` exactly.
 
 Use this shape:
 
 ```markdown
 ## Outcomes
 
-### <desired state>
+### Must-win: <desired state>
 
 - [ ] <Linear issue or concrete action>
 - [ ] <verification, merge, or follow-up step>
+
+### <another desired state>
+
+- [ ] <concrete action>
 
 ## Other tasks
 
@@ -56,8 +76,9 @@ Use this shape:
 - Prefer outcome wording such as “Agent introspection M2 is code-complete” over “Work on agent introspection tickets.”
 - Keep tasks granular even when the outcome is ambitious.
 - Deduplicate tasks carried from the prior closeout and tasks already present today.
+- Keep Sean's proposed must-win unless he changes it after the challenge. Do not promote another outcome implicitly.
 - Treat an unchecked prior `Captured` entry as an incomplete closeout. Preserve it explicitly in today's `Other tasks` until its disposition is decided; never silently omit it.
 - Likewise preserve any unchecked prior outcome or standalone task that is not clearly represented in `Carry forward`, `Waiting`, `Tomorrow`, or `Not continuing`. Do not revive items the closeout explicitly dropped or superseded.
-- If a missing priority would materially change the plan, identify it briefly instead of guessing.
+- If a missing priority would materially change the plan, ask Sean instead of guessing.
 - Edit the note directly unless the user asks only for suggestions.
-- After editing, report the note path, chosen outcomes, and any unresolved priority decision.
+- After editing, report the note path, the must-win outcome, other chosen outcomes, and any challenge Sean explicitly accepted or rejected.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Design Project"
+  short_description: "Design complex work before implementation"
+  default_prompt: "Use $design-project to turn this project or ticket into a reviewed architecture and vertical delivery plan."
+policy:
+  allow_implicit_invocation: false
