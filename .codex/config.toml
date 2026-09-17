@@ -2,7 +2,7 @@ approvals_reviewer = "user"
 
 plan_mode_reasoning_effort = "xhigh"
 service_tier = "fast"
-model = "gpt-5.6-sol"
+model = "gpt-6-astra"
 model_reasoning_effort = "high"
 
 [projects."/Users/sean/Developer/mono"]
@@ -44,6 +44,7 @@ vim_mode_default = true
 
 [tui.model_availability_nux]
 "gpt-5.6-sol" = 3
+gpt-6-astra = 4
 
 [features]
 experimental_use_rmcp_client = true # Needed for Linear MCP https://linear.app/docs/mcp#codex

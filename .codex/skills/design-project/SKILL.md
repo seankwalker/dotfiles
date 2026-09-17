@@ -17,17 +17,18 @@ Do not use the technical-writing skill as a continuous constraint during reposit
 
 ## Core separation of concerns
 
-The workflow has three distinct jobs:
+The workflow has four distinct jobs:
 
 1. **Design:** establish what is true and what should be built.
-2. **Writing:** express the accepted design for a human reader in a fresh context.
-3. **Reader review:** test the resulting document from another fresh context.
+2. **Writing and revision:** express the accepted design for a human reader in a fresh context, then revise it from independent findings.
+3. **Prose review:** test section placement and prose quality from another fresh context.
+4. **Reader review:** test whether a fresh reader can recover the design without the author's context.
 
-This skill owns the first job and the final semantic verification after writing.
+This skill owns the first job and semantic verification of every candidate sent to independent review.
 
 Do not collapse these jobs merely because one session is capable of performing all of them.
 
-The absence of context in later sessions is deliberate. Do not compensate by passing the research transcript, subagent histories, exploratory reasoning, or other accumulated context to the writer or reader reviewer.
+The absence of context in later sessions is deliberate. Do not compensate by passing the research transcript, subagent histories, exploratory reasoning, or other accumulated context to the writer or either reviewer.
 
 ## Choose the process depth
 
@@ -59,9 +60,9 @@ Keep these categories distinguishable throughout the design:
 
 - verified current behavior;
 - accepted product requirements;
-- technical requirements and invariants;
+- technical requirements;
 - proposed choices;
-- accepted design decisions;
+- accepted architecture invariants and design decisions;
 - rejected alternatives;
 - open questions; and
 - implementation details.
@@ -108,7 +109,7 @@ Before architecture, establish or link:
 
 Challenge solution language that has been presented as a requirement.
 
-Do not block merely to obtain ritual approval when the user's prompt already settles the contract. Stop for Sean only when a consequential product choice remains genuinely ambiguous.
+Do not settle a product choice from technical convenience or a research worker's recommendation.
 
 ## Establish current-state evidence
 
@@ -128,6 +129,32 @@ For consequential current-state claims, retain concrete repository anchors such 
 - observed runtime behavior.
 
 A later writer should not have to rediscover why a claim is believed.
+
+## Confirm scope with Sean
+
+For an issue design or full TDD, stop after the bounded research needed to explain the product boundary and before choosing architecture or program design. Return this checkpoint:
+
+```markdown
+## Scope checkpoint
+
+**Outcome:** <observable result>
+
+**In scope:** <users, entry points, workflows, and behavior>
+
+**Accepted limitations or UX quirks:** <behavior that may remain inconsistent, imperfect, or unsupported>
+
+**Out of scope or deferred:** <explicit exclusions>
+
+**Decisions needed:** <only consequential choices that remain>
+
+**Technical consequences:** <the important complexity or simplification created by this boundary>
+```
+
+Ask Sean to accept or revise the scope before continuing. Do not produce the architecture, exact external contracts, program design, or Design Handoff in the same turn as an unaccepted scope checkpoint.
+
+Do not infer that every related entry point must behave consistently. A deliberate limitation or UX quirk may be cheaper and better than expanding the design, but Sean must accept that tradeoff explicitly.
+
+If later evidence changes an accepted scope boundary or reveals a material consequence that was absent from the checkpoint, reopen the scope discussion before continuing.
 
 ## Frame architecture questions
 
@@ -232,6 +259,21 @@ Each slice must identify:
 
 Detail only the first one to three slices. Keep later work as a map until evidence makes more detailed planning useful.
 
+## Resolve newly uncovered consequential choices with Sean
+
+Before freezing the Design Handoff, review every unresolved decision returned by later research and every choice the proposed design added beyond the accepted scope checkpoint.
+
+Do not silently choose when an option would materially change:
+
+- which users, entry points, or workflows are in scope;
+- public behavior or an exact external contract;
+- a durable data or replay contract;
+- authorization, failure, or privacy guarantees;
+- migration or deployment risk; or
+- work deferred to a later project.
+
+Present the smallest decision needed, the evidence, and the meaningful consequence of each viable option. Ask Sean to decide before the handoff is frozen. Record the accepted choice in the product contract or accepted design decisions. If nothing has changed since the accepted scope checkpoint, continue without asking Sean to approve the same scope twice.
+
 ## Freeze the Design Handoff
 
 Once the design is technically coherent, stop turning the research session into a polished TDD.
@@ -274,17 +316,17 @@ Use this structure:
 
 ### F-02: ...
 
-## Requirements and invariants
+## Requirements
 
 ### R-01
-<atomic requirement or invariant>
+<atomic product or technical requirement that every acceptable solution must satisfy>
 
 **Reason/source:** <accepted product requirement, failure mode, external constraint, etc.>
 
 ## Accepted design decisions
 
-### D-01: <decision>
-**Decision:** <concrete design choice>
+### D-01: <decision or architecture invariant>
+**Decision/invariant:** <concrete design choice or guarantee created by the chosen architecture>
 **Why:** <rationale necessary to preserve the choice>
 **Concrete anchors:** <systems, paths, modules, types, or planned locations involved>
 **Depends on:** <R/F/D identifiers when useful>
@@ -342,6 +384,8 @@ List the semantic claims that the final document must preserve. These are not se
 
 Keep the handoff bounded to information the final document or semantic verifier needs. Raw exploration logs do not belong in it.
 
+Before freezing the handoff, inspect every `R` item. Keep it as a requirement only when it describes behavior or a constraint that every acceptable solution must satisfy. If it names a selected field, type, module, call path, propagation mechanism, or combination of safeguards, move that meaning to `D`, `P`, or `C` unless the exact mechanism is itself an accepted constraint. Do not preserve a design choice as a requirement merely because the design depends on it.
+
 ## Hand off to a fresh writer
 
 When the Design Handoff is complete, the publication draft must be created in a fresh Codex thread using the design-writer skill.
@@ -364,28 +408,38 @@ Do not give it:
 
 The writer may use targeted repository reads to clarify an exact identifier or syntax, but must not perform broad design research or silently change the accepted design.
 
-## Reader-review loop
+## Independent review and revision loop
 
-After the writer produces a candidate document, launch a fresh thread with the technical-document-reader skill.
+After the writer produces a candidate document, perform the semantic verification below. Do not spend independent review cycles on a candidate that does not yet preserve the Design Handoff.
 
-Give the reader only:
+Once semantic verification passes, launch two fresh review threads against the same candidate version. They may run in parallel. This is review cycle 1.
+
+Launch one thread with the technical-document-prose-reviewer skill. Give it only:
+
+* the candidate document;
+* the governing artifact template; and
+* repository documentation conventions when they affect the published artifact.
+
+Launch the other thread with the technical-document-reader skill. Give it only:
 
 * the candidate document; and
 * the reader-review instructions.
 
-Do not give it the Design Handoff, research context, writer reasoning, or previous reviewer findings.
+Do not give either reviewer the Design Handoff, research context, writer reasoning, previous drafts, or previous reviewer findings.
 
-If the reader reports material comprehension problems, return those findings to the existing writer thread. The writer revises against both the findings and the Design Handoff.
+Each reviewer must complete its whole-document review and return all material findings it can identify in that pass. It must not stop after finding enough to return `REVISE`.
 
-For the next review, launch another fresh reader thread. Do not reuse a reader that has already learned the document's private vocabulary.
+Return the complete set of `REVISE` findings to the existing writer thread together. The writer makes one coherent revision against the full set while preserving the Design Handoff. Do not start another review cycle after a partial or single-finding edit.
 
-Repeat until the reader reports no material comprehension findings.
+After any revision, run semantic verification on the revised candidate first. If it passes, launch new prose-review and reader-review threads against that candidate. Do not reuse reviewers that have learned the document's vocabulary or seen explanations of earlier findings.
 
-Minor stylistic preferences do not block convergence.
+Run at most three prose-and-reader review cycles in total. If either reviewer still reports a blocking finding in cycle 3, stop and give Sean the unresolved findings, the affected passages, and whether they appear to reflect unclear design or an unreliable review criterion. Do not launch cycle 4.
 
-## Final semantic verification
+Do not treat the writer's own final pass as a substitute for either independent review. Minor stylistic preferences do not block convergence.
 
-After the document passes cold-reader review, resume this original design session and verify the candidate against the accepted Design Handoff and source evidence.
+## Semantic verification
+
+Before each independent review cycle, resume this original design session and verify the candidate against the accepted Design Handoff and source evidence.
 
 This pass is semantic, not stylistic.
 
@@ -394,6 +448,8 @@ Check for:
 * accepted claims that disappeared;
 * claims whose certainty changed;
 * requirements weakened or strengthened;
+* a requirement that now encodes a selected implementation or belongs to a design section;
+* a design decision or architecture invariant presented as an independent requirement;
 * decisions whose boundary changed;
 * rationale whose removal makes a decision materially easier to misunderstand;
 * unsupported new technical claims;
@@ -402,15 +458,18 @@ Check for:
 * contradictions between sections; and
 * examples or exact contracts that no longer match source evidence.
 
-Return findings in this form:
+Always record the result in this form, including a `PASS` result:
 
 ```markdown
 ## Semantic verification
 
 **Verdict:** PASS | REVISE | DESIGN REOPENED
 
+**Summary:** <no semantic differences found, or a concise account of what must change>
+
+<!-- Include finding blocks only for REVISE or DESIGN REOPENED. -->
 ### S-01
-**Type:** dropped | changed | strengthened | weakened | unsupported | contradiction | unresolved
+**Type:** dropped | changed | strengthened | weakened | misclassified | unsupported | contradiction | unresolved
 **Design source:** <handoff identifier>
 **Document location:** <section/phrase>
 **Problem:** <semantic difference>
@@ -419,24 +478,25 @@ Return findings in this form:
 
 Do not offer prose improvements during semantic verification.
 
-If all publication obligations and accepted decisions are preserved and no unsupported claims were introduced, return `PASS`.
+If all publication obligations and accepted decisions are preserved and no unsupported claims were introduced, return `PASS` and state that no semantic differences were found.
 
 If the writer can repair the problem without changing the accepted design, return `REVISE` and send the findings back to the writer.
 
 If the discrepancy exposes a missing or invalid design decision, return `DESIGN REOPENED`, update the Design Handoff after resolving it, and then send the new design state to the writer.
 
-After any semantic correction, run a new fresh-reader review before final acceptance.
+After any semantic correction, verify the revised candidate again before sending it to independent review. A semantic correction made after a review cycle requires a new prose and reader cycle and remains subject to the three-cycle limit.
 
 ## Convergence rule
 
-The document is complete only when both are true:
+The document is complete only when all three are true for the same candidate version:
 
-1. a fresh reader reports no material comprehension problem; and
-2. semantic verification reports `PASS`.
+1. a fresh prose reviewer reports `PASS`;
+2. a fresh reader reports no material comprehension problem; and
+3. semantic verification reports `PASS`.
 
 Do not optimize indefinitely for stylistic preference.
 
-If three writer/reviewer cycles fail to converge on the same class of issue, stop and surface the disagreement to Sean. The workflow has likely exposed either an unclear design concept or a weak review criterion rather than a sentence-editing problem.
+The three-cycle limit is a hard cap across all prose-and-reader review cycles, not three attempts per issue class. A design reopening creates a new accepted handoff and restarts publication from a new candidate; it does not authorize silently resolving the design question or continuing an unbounded review loop.
 
 ## Publication
 

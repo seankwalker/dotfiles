@@ -53,7 +53,7 @@ Use this for a substantial ticket whose product behavior is already settled. Del
 
 ## Technical Requirements
 
-- <Testable invariant or constraint every acceptable implementation must satisfy.>
+- <Testable behavior or constraint every acceptable implementation must satisfy, stated without the selected code structure.>
 
 ## Architecture
 
@@ -145,7 +145,7 @@ Delete optional sections that do not apply. Do not leave empty headings or write
 
 ### Technical
 
-- <Testable invariant or system constraint, independent of the chosen code structure.>
+- <Testable behavior or system constraint every acceptable implementation must satisfy, stated without the selected code structure.>
 
 ## Architecture
 
@@ -240,6 +240,13 @@ Do not turn the research journey into a narrative or use this section as a misce
 Product requirements describe visible behavior, policy, committed scope, and non-goals. Technical requirements describe testable invariants and constraints that any acceptable architecture must satisfy.
 
 Requirements must not encode the chosen implementation unless the mechanism itself is an accepted constraint. A requirement constrains every acceptable solution; an architecture invariant states what the selected boundary guarantees or enforces. Write one direct sentence per requirement bullet in the normal case. If a bullet needs several sentences, split multiple requirements or move rationale and implementation detail to their owning sections. If the issue already contains accepted product requirements, link it and omit or briefly restate only the requirements needed to review the technical design.
+
+Before keeping a technical requirement, ask:
+
+1. Would every acceptable solution have to satisfy this claim?
+2. Can the claim be stated and verified without naming the selected field, type, module, helper, call path, propagation mechanism, or combination of safeguards?
+
+If either answer is no, move the claim to Architecture, Program Design, failure behavior, deployment, or alternatives as appropriate. Preserve it as a requirement only when the exact mechanism is itself an accepted constraint.
 
 ### Architecture
 

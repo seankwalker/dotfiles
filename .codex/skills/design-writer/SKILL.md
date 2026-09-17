@@ -1,6 +1,6 @@
 ---
 name: design-writer
-description: Turn an accepted Design Handoff into a clear TDD, RFC, issue design, or other technical design artifact. Use only in a fresh session that did not perform the underlying repository investigation. Preserve the accepted design while translating research-oriented state into prose for human engineers.
+description: Turn an accepted Design Handoff into a clear TDD, RFC, issue design, or other technical design artifact, and revise it from independent prose and reader findings. Use only in a fresh session that did not perform the underlying repository investigation. Preserve the accepted design while translating research-oriented state into prose for human engineers.
 ---
 
 # Design Writer
@@ -55,6 +55,19 @@ Before writing prose:
 
 Do not surface this planning unless it contains a blocker.
 
+## Keep requirements separate from the selected design
+
+Before drafting a Requirements section, inspect each candidate claim.
+
+Keep it as a requirement only when:
+
+- every acceptable solution must satisfy it; and
+- it can be stated without depending on the selected code structure or control flow.
+
+A claim that names a field, type, module, helper, call path, propagation mechanism, or chosen combination of safeguards normally belongs in Architecture or Program Design. The exact mechanism may remain a requirement only when the handoff says that mechanism is itself an accepted constraint.
+
+The handoff identifier does not determine the final document section. Move accepted meaning to the section that represents its status accurately. If the handoff explicitly labels a selected mechanism as an independent requirement, report a source gap rather than silently changing its status or publishing the mismatch.
+
 ## Treat the Design Handoff as semantic authority
 
 The handoff's accepted facts and decisions constrain the draft.
@@ -82,7 +95,7 @@ You may freely:
 - choose diagrams, tables, bullets, or prose appropriate to the reader; and
 - remove detail that the handoff does not mark as publication-relevant and that does not help the target reader.
 
-## Translate internal ontology
+## Remove research-only terminology
 
 The Design Handoff contains a terminology ledger.
 
@@ -116,7 +129,7 @@ over a sentence such as:
 
 > The trusted ingress stamps an execution capability that crosses the asynchronous boundary.
 
-The exact wording is not important. The reduction in dereferencing is.
+The exact wording is not important. The second version makes the behavior explicit.
 
 ## Prefer concrete anchors when they reduce cognitive load
 
@@ -149,7 +162,7 @@ over:
 
 > The policy core owns effective-mode projection.
 
-## Minimize dereferencing
+## Make behavior direct
 
 On every sentence-level pass, ask whether the reader must mentally translate an abstraction before they can recover the concrete behavior.
 
@@ -232,30 +245,24 @@ Check especially for information lost through simplification:
 
 Do not solve coverage problems by copying the handoff verbatim. Express the meaning naturally in the section that owns it.
 
-## Self-review before cold-reader review
+## Prepare the candidate for independent review
 
 Apply the technical-writing skill's normal final pass.
 
-Then perform two additional checks.
+Then check the following. This is preparation, not a substitute for independent review.
 
-### Ontology check
+- List the project-specific terms introduced by the document. For each one, ask:
 
-List mentally the project-specific nouns introduced by the document.
+  - Is this already an established term?
+  - Does the document define it before relying on it?
+  - Does the concept actually need a name?
+  - Could the same meaning be stated more concretely?
 
-For each one, ask:
+- Remove unnecessary private vocabulary.
+- Read the document without mentally supplying the Design Handoff. Rewrite any sentence that is clear only because you know the research that produced it.
+- Inspect every requirement again. Move selected design or code mechanics to the section that owns them.
 
-- Is this already an established term?
-- Does the document define it before relying on it?
-- Does the concept actually need a name?
-- Could the same meaning be stated more concretely?
-
-Remove unnecessary private vocabulary.
-
-### Concrete-reading check
-
-Read the document without mentally supplying the Design Handoff.
-
-If a sentence is clear only because you know the research that produced it, rewrite it.
+The candidate must still pass separate prose and reader reviews in fresh sessions.
 
 ## Output contract
 
@@ -269,16 +276,18 @@ Produce:
 
 Do not include the writer handoff in the published TDD.
 
-If there are no concerns, state that the draft is ready for cold-reader review.
+If there are no concerns, state that the draft is ready for independent prose and reader review.
 
 ## Revision mode
 
-When given cold-reader findings, revise the current candidate using:
+When given prose-review or reader-review findings, revise the current candidate using:
 
-- the findings as evidence about comprehension; and
+- the findings as evidence about section placement, prose, or comprehension; and
 - the Design Handoff as authority about meaning.
 
-Fix the comprehension problem, not merely the quoted sentence.
+Treat the findings from one review cycle as a complete revision set. Address them together, inspect the rest of the document for the same root causes, and finish the coherent revision before returning a new candidate. Do not return a series of single-finding edits for repeated review.
+
+Perform a real revision rather than substituting words in the quoted sentence. Identify the claim the passage must communicate and the job of its section, then rewrite or move the complete bullet, paragraph, or related passage from that meaning.
 
 A reviewer finding may reveal that:
 
@@ -293,6 +302,6 @@ Do not blindly implement the reviewer's suggested wording, if any.
 
 If a reviewer request would require changing the accepted design or adding unsupported meaning, do not comply. Report a source gap to the design session.
 
-After revision, rerun the publication-obligation and ontology checks.
+After revision, rerun the publication-obligation, terminology, and requirement-placement checks.
 
-The next cold-reader pass must happen in a new fresh session.
+The next prose and reader reviews must happen in new fresh sessions against the same revised candidate.

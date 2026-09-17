@@ -9,7 +9,8 @@
 {
   // AI
   "markdown_preview": {
-    "limit_content_width": false
+    "max_width": 1200.0,
+    "limit_content_width": true
   },
   "git": {
     "diff_base": "default_branch"
@@ -24,16 +25,10 @@
       "env": {
         "CODEX_PATH": "/opt/homebrew/bin/codex"
       },
-      "favorite_config_option_values": {
-        "model": [
-          "gpt-5.6-luna",
-          "gpt-5.6-sol"
-        ]
-      },
       "default_config_options": {
-        "model": "gpt-5.6-sol",
+        "model": "gpt-6-astra",
         "fast-mode": true,
-        "reasoning_effort": "xhigh",
+        "reasoning_effort": "high",
         "mode": "agent-full-access"
       },
       "type": "registry"

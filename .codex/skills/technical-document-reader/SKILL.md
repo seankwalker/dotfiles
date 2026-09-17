@@ -83,6 +83,8 @@ Do not stop to solve confusing passages. Record where you had to:
 
 Those moments are review evidence.
 
+Complete all three passes even if the first pass already reveals a blocking problem. Return every material comprehension failure you can identify in this review, grouped by root cause, so one revision can address the full finding set. Do not reserve known findings for a later draft.
+
 ## Second pass: ontology audit
 
 Identify project-specific nouns and noun phrases that the document relies on.
