@@ -17,23 +17,22 @@ Draft a team-relevant snapshot of recent progress, today's intended outcomes, an
 
 ## Draft the update
 
-Use this exact Slack-friendly shape:
+Use this exact plain-text shape (the fence below illustrates the template; do not include a code fence in the response):
 
 ```text
-:rewind: Yesterday:
-- <one or two meaningful shipped, verified, or decided outcomes>
+:rewind: <One or two meaningful shipped, verified, or decided outcomes, written as sentences separated by periods.>
 
-:arrow_forward: Today:
-- <one to three outcome-oriented priorities>
+:arrow_forward: <One to three outcome-oriented priorities, written as sentences separated by periods.>
 
-:octagonal_sign: Blockers:
-- <active blocker, or "None">
+:octagonal_sign: <Active blocker, or "None.">
 ```
 
 Keep the complete update around 60–120 words and ready to paste without editing. Prefer plain language over internal task mechanics. Include Linear identifiers or links when they help teammates follow the work. Consolidate related tasks into an outcome rather than copying the checklist verbatim.
 
-Use a literal ASCII hyphen followed by a space (`- `) for every bullet so Slack formats pasted updates consistently. Do not use Unicode bullet characters.
+Return only the standup in the final response: no preamble, code fence, blockquote, bullets, or closing explanation. Write one paragraph per section, starting with its emoji shortcode followed by the content on the same line. Use only the emojis as labels; omit “Yesterday:”, “Today:”, and “Blockers:”. Separate items with periods, not bullets or line breaks. Start each paragraph at column zero and leave one blank line between sections.
 
-Mention stretch work only when it is likely to receive attention. Treat on-call duty or interruptions as capacity context, not as an apology. Keep `Blockers` limited to something actively preventing a listed outcome; write `- None` when there is no blocker.
+In terminal Codex, Sean can use `/copy` (or `Ctrl+O`) after the response completes instead of selecting terminal-rendered text, which can include display markers and indentation. Keep any copying instructions in commentary so they do not contaminate the copied final response. Do not change terminal settings. If clean copying is unavailable in another client, offer a UTF-8 `.txt` file containing only the draft.
+
+Mention stretch work only when it is likely to receive attention. Treat on-call duty or interruptions as capacity context, not as an apology. Keep the `:octagonal_sign:` section limited to something actively preventing a listed outcome; write `None.` when there is no blocker.
 
 Draft only. Do not post to Slack or edit the daily note unless the user explicitly asks. If the plan changes materially, rerun the skill to produce a fresh snapshot.
