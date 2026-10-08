@@ -221,7 +221,7 @@ For every project-specific term introduced during design, classify it as one of:
 - **Proposed durable term:** a new concept the design intentionally introduces and future engineers should use.
 - **Working shorthand:** language useful for this investigation but not itself part of the design.
 
-For an existing term, record a concrete repository or documentation anchor when useful.
+Include important actors, policy inputs, and scope labels, including ordinary words with project-specific meanings such as "external" or "worker". For an existing project-specific term, record its concrete meaning and a repository or documentation anchor that identifies its referent. Being established does not make a term self-explanatory.
 
 For a proposed durable term, define exactly what it refers to, why the concept deserves a name, and where it will exist concretely in the system.
 
@@ -365,7 +365,7 @@ Use this structure:
 
 | Term | Status | Concrete meaning or anchor | Publication guidance |
 | --- | --- | --- | --- |
-| <term> | existing | <path/type/domain meaning> | use normally |
+| <term> | existing | <concrete meaning and identifying anchor> | establish role and scope before shorthand |
 | <term> | proposed durable | <exact concept> | define before use |
 | <term> | working shorthand | <what we meant internally> | rewrite concretely; do not inherit automatically |
 
@@ -396,6 +396,8 @@ Give that thread:
 * the governing TDD/RFC template and repository documentation conventions;
 * the technical-writing skill; and
 * explicitly referenced source files only when needed.
+
+The publication draft must include **Scope and terminology** after Objective and before Context, as specified in the TDD template. The terminology ledger supplies evidence for this section; the writer must also check terms used in the actual draft rather than treating the ledger as exhaustive.
 
 Do not give it:
 

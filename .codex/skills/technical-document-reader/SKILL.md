@@ -89,16 +89,20 @@ Complete all three passes even if the first pass already reveals a blocking prob
 
 Identify project-specific nouns and noun phrases that the document relies on.
 
+For issue designs and TDDs produced by design-project, check that **Scope and terminology** appears after Objective and before Context. Audit its coverage against the entire document, including diagrams and tables; do not treat the section's existence as proof that the vocabulary is explained. Include ordinary words used with project-specific meanings, especially actors, policy categories, and scope labels.
+
 For each important one, ask:
 
 1. Is it an established identifier or ordinary domain term?
-2. If it is a new conceptual term, is it defined before use?
+2. If its meaning is project-specific, is its role or scope established before use, even when the term already exists in the repository?
 3. Can I point to the concrete thing or behavior it denotes?
 4. Does giving this concept its own name make later reasoning easier?
 5. Is the document using one stable name for the concept?
 6. Would plain behavioral language communicate the same thing more directly?
 
 Flag terms that behave like private shorthand masquerading as architecture vocabulary.
+
+A later definition or a plausible inference does not establish an earlier referent. Missing information about who acts, which policy applies, or which executions are included is a comprehension problem even in Objective or Context. Report such gaps under the existing severity criteria. Also flag definitions that merely substitute other unexplained terms or require repeated lookup to understand later sentences.
 
 Do not require every concept to map one-to-one to a file or type. Architecture sometimes needs real abstractions. The test is whether the abstraction earns the cognitive cost it imposes.
 

@@ -18,9 +18,9 @@ Use the smallest artifact that exposes the decisions a human should make before 
 | Work | Required artifact | Sections |
 | --- | --- | --- |
 | Small, local, reversible issue with an established pattern | No TDD. Use the `$work-on-issue` research checkpoint and acceptance claims. | Outcome, proposed approach, verification. |
-| Substantial issue with a settled product outcome | Issue design proposal. Do not rewrite product requirements already accepted in the issue. | Objective, Context, relevant Technical Requirements, Architecture when a boundary or durable contract changes, Program Design, Verification, and one or more vertical Milestones when the work should be reviewed in slices. |
-| Project or cross-cutting change | Full TDD. | Metadata, Objective, Context, Requirements, Architecture, Program Design, Verification, Deployment and Rollout, Observability, Milestones, Resources. |
-| Large refactor, migration, or infrastructure change with no new product behavior | Full technical TDD with the accepted motivation linked. Product requirements may be omitted. | Objective, Context, Technical Requirements, Architecture, Program Design, Verification, Deployment and Rollout, Observability when operational behavior changes, Milestones, Resources. |
+| Substantial issue with a settled product outcome | Issue design proposal. Do not rewrite product requirements already accepted in the issue. | Objective, Scope and terminology, Context, relevant Technical Requirements, Architecture when a boundary or durable contract changes, Program Design, Verification, and one or more vertical Milestones when the work should be reviewed in slices. |
+| Project or cross-cutting change | Full TDD. | Metadata, Objective, Scope and terminology, Context, Requirements, Architecture, Program Design, Verification, Deployment and Rollout, Observability, Milestones, Resources. |
+| Large refactor, migration, or infrastructure change with no new product behavior | Full technical TDD with the accepted motivation linked. Product requirements may be omitted. | Objective, Scope and terminology, Context, Technical Requirements, Architecture, Program Design, Verification, Deployment and Rollout, Observability when operational behavior changes, Milestones, Resources. |
 
 Security boundaries, durable state, cross-service contracts, public APIs, migrations, compatibility, deployment ordering, and failure recovery normally require at least an issue design proposal. Several coupled boundaries or several independently reviewable releases usually require a full TDD.
 
@@ -46,6 +46,10 @@ Use this for a substantial ticket whose product behavior is already settled. Del
 ## Objective
 
 <The accepted outcome in one short paragraph. Link the issue rather than rewriting its product requirements.>
+
+## Scope and terminology
+
+<Required. Briefly state the accepted scope and define the project-specific actors, policy inputs, and scope labels used below. Follow the section-ownership guidance; derive the entries from the actual draft.>
 
 ## Context
 
@@ -132,6 +136,10 @@ Delete optional sections that do not apply. Do not leave empty headings or write
 ## Objective
 
 <One short paragraph stating the observable user or platform outcome, the essential safety or quality bar, and any deployment environments that must behave consistently. Do not describe the implementation here.>
+
+## Scope and terminology
+
+<Required. Briefly state the accepted scope and define the project-specific actors, policy inputs, and scope labels used below. Follow the section-ownership guidance; derive the entries from the actual draft.>
 
 ## Context
 
@@ -228,6 +236,14 @@ Delete optional sections that do not apply. Do not leave empty headings or write
 State the outcome in one paragraph. A good objective can be evaluated without knowing the chosen architecture. Include the safety, durability, or consistency bar only when it is part of the outcome.
 
 Do not put motivation history, component names, milestones, or solution detail here.
+
+### Scope and terminology
+
+This section is required after Objective and before Context for issue designs and full TDDs. State the accepted boundary briefly, including exclusions needed to interpret it. Define the project-specific terms the reader needs before encountering the current-state and design claims. Keep Objective in ordinary language or explain any specialized term it needs inline.
+
+Derive entries from the actual draft, including diagrams and tables, rather than copying only the handoff ledger. Include ordinary words with project-specific meanings. Explain each term's role or boundary in plain language and identify repository components with a service name, endpoint, module, or other stable anchor. Do not use a path as a substitute for explaining what the component does.
+
+Use concise prose, a list, or a term/meaning table. Include only terms used by this design; ordinary technical vocabulary needs no glossary. Keep detailed behavior in Requirements and implementation mechanics in Program Design. Definitions must not depend on other unexplained jargon, and later prose must remain understandable without repeated glossary lookup.
 
 ### Context
 

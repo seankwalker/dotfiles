@@ -95,6 +95,16 @@ You may freely:
 - choose diagrams, tables, bullets, or prose appropriate to the reader; and
 - remove detail that the handoff does not mark as publication-relevant and that does not help the target reader.
 
+## Establish scope and terminology
+
+For issue designs and TDDs in this workflow, include **Scope and terminology** after Objective and before Context. State the accepted scope briefly and define the project-specific terms needed to understand the document. Keep Objective in ordinary language or explain any specialized term it needs inline.
+
+Build the section from the actual draft as well as the handoff's terminology ledger. Check important actors, policy inputs, and scope labels, including ordinary words with project-specific meanings. Each definition must explain the concrete role or boundary; identify repository components with a service name, endpoint, module, or other stable anchor. A path alone is not a definition. Use one consistent name afterward.
+
+Include only terms the reader needs for this design. Omit ordinary technical vocabulary, unused definitions, and research shorthand that should disappear. Keep detailed requirements and implementation mechanics in their owning sections. If a definition needs unsupported meaning, report a source gap.
+
+A definition permits concise later references, but does not excuse unclear actors or overloaded sentences. Rewrite passages that require repeated trips back to the section.
+
 ## Remove research-only terminology
 
 The Design Handoff contains a terminology ledger.
@@ -251,12 +261,14 @@ Apply the technical-writing skill's normal final pass.
 
 Then check the following. This is preparation, not a substitute for independent review.
 
-- List the project-specific terms introduced by the document. For each one, ask:
+- Reconcile Scope and terminology against the complete draft, including its diagrams and tables. For each important project-specific term, ask:
 
   - Is this already an established term?
   - Does the document define it before relying on it?
   - Does the concept actually need a name?
   - Could the same meaning be stated more concretely?
+
+- Check ordinary-looking scope labels and actor names as well as code identifiers. Add missing definitions or replace unnecessary shorthand; remove definitions no longer used after revision.
 
 - Remove unnecessary private vocabulary.
 - Read the document without mentally supplying the Design Handoff. Rewrite any sentence that is clear only because you know the research that produced it.
