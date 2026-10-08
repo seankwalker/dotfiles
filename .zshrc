@@ -212,6 +212,10 @@ alias gwa='git-manage-worktree add'
 alias gwr='git-manage-worktree rm'
 alias gwo='git-manage-worktree open'
 
+fpath=("$HOME/bin/completions" $fpath)
+autoload -Uz _git-manage-worktree
+compdef _git-manage-worktree git-manage-worktree
+
 
 ######################################
 # Environment

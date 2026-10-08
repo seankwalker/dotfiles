@@ -1,0 +1,74 @@
+#compdef git-manage-worktree
+
+local context state state_descr line
+local -A opt_args
+local subcommand=${words[2]}
+local -a branches selected expl
+local record worktree branch expected
+local base=${WORKTREES_BASE:-$HOME/Developer/mono-worktrees}
+local here
+
+if (( CURRENT == 2 )); then
+  _describe 'worktree command' '(
+    "add:Create a worktree"
+    "open:Open existing worktrees"
+    "rm:Remove existing worktrees"
+    "path:Print a registered worktree path"
+    "guidance:Refresh worktree guidance"
+  )'
+  return
+fi
+
+# Let _arguments see the subcommand as the command word.
+words=("${words[@]:1}")
+(( CURRENT-- ))
+
+case $subcommand in
+  open)
+    _arguments -s \
+      '(-t --tmux)'{-t,--tmux}'[Open in tmux]' \
+      '(-z --zed)'{-z,--zed}'[Open in Zed]' \
+      '*:worktree branch:->branches'
+    ;;
+  rm|remove|del|delete)
+    _arguments -s \
+      '(-f --force)'{-f,--force}'[Force removal]' \
+      '-d[Delete the local branch too]' \
+      '*:worktree branch:->branches'
+    ;;
+  path)
+    _arguments '1:worktree branch:->branches'
+    ;;
+  *) return 1 ;;
+esac
+
+[[ $state == branches ]] || return
+here=$(git rev-parse --show-toplevel 2>/dev/null) || return 1
+if (( CURRENT > 2 )); then
+  selected=("${words[@]:1:$((CURRENT - 2))}")
+fi
+
+while IFS= read -r -d '' record; do
+  case $record in
+    'worktree '*) worktree=${record#worktree } ;;
+    'branch refs/heads/'*)
+      branch=${record#branch refs/heads/}
+      [[ -d $worktree ]] || continue
+      (( ${selected[(Ie)$branch]} )) && continue
+
+      # open/rm construct paths under WORKTREES_BASE; path uses Git's registry.
+      if [[ $subcommand != path ]]; then
+        expected=$base/${branch//\//-}
+        [[ ${worktree:A} == ${expected:A} ]] || continue
+      fi
+      case $subcommand in
+        rm|remove|del|delete)
+          [[ ${worktree:A} == ${here:A} ]] && continue
+          ;;
+      esac
+      branches+=("$branch")
+      ;;
+  esac
+done < <(git worktree list --porcelain -z 2>/dev/null)
+
+_wanted branches expl 'worktree branch' compadd -a branches

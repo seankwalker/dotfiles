@@ -5,7 +5,7 @@ usage() {
   cat <<EOF
 usage:
   ${0##*/} add  [-t|--tmux] [-z|--zed] <branch> [start-point]
-  ${0##*/} guidance [worktree-path]
+  ${0##*/} guidance [--check] [worktree-path]
   ${0##*/} path <branch>
   ${0##*/} open [-t|--tmux] [-z|--zed] <branch> [branch ...]
   ${0##*/} rm   [-f|--force] [-d] <branch> [branch ...]
@@ -19,7 +19,7 @@ notes:
   - add: creates a worktree without opening it by default
   - add --tmux: opens the new worktree in a detached tmux window
   - add --zed: opens the new worktree with 'zed <path>'
-  - guidance: regenerates a personal AGENTS.override.md when the repo uses cascade
+  - guidance: refreshes personal guidance; --check fails if missing or stale without writing
   - path: prints the registered filesystem path for a branch's worktree
   - open --zed: opens existing worktrees with 'zed <path>'
   - open --tmux: opens detached tmux windows with Codex resume on the left and a shell on the right
@@ -69,39 +69,70 @@ ensure_in_git_repo() {
 
 generate_personal_agents_override() {
   local target_dir="$1"
+  local check_only="${2:-0}"
+  local optional="${3:-0}"
   local base_file="$target_dir/AGENTS.md"
   local override_file="$target_dir/AGENTS.override.md"
   local exclude_file=""
   local tmp_file=""
 
-  [[ -f "$base_file" ]] || return 0
-  grep -Fxq '## Delegation (cascade)' "$base_file" || return 0
+  if [[ ! -f "$base_file" ]] || ! grep -Eq '^## Delegation (\(cascade\)|and verification)[[:space:]]*$' "$base_file"; then
+    if [[ "$optional" -eq 1 && ! -e "$override_file" ]]; then
+      echo "guidance skipped: no supported delegation section in $base_file" >&2
+      return 0
+    fi
+    echo "error: no supported delegation section in $base_file; guidance was not refreshed" >&2
+    return 1
+  fi
   [[ -f "$AGENTS_OVERRIDE_TEMPLATE" ]] || {
     echo "error: AGENTS override template not found: $AGENTS_OVERRIDE_TEMPLATE" >&2
     return 1
   }
 
+  tmp_file="$(mktemp "${TMPDIR:-/tmp}/codex-guidance.XXXXXX")"
+  {
+    head -n 1 "$base_file" &&
+    printf '\n' &&
+    cat "$AGENTS_OVERRIDE_TEMPLATE" &&
+    awk '
+      NR == 1 { next }
+      /^## Delegation \(cascade\)[[:space:]]*$/ { sections++; legacy = 1; skipping = 1; next }
+      /^## Delegation and verification[[:space:]]*$/ { sections++; current = 1; print; next }
+      skipping && /^## / { skipping = 0 }
+      current && /^## / { current = 0 }
+      current && sub(/^Plan and review in the main session\. Delegate implementation to the cascade `implementer` role and builds, linting, and tests to the cascade `mechanic` role\.[[:space:]]*/, "") { replaced++ }
+      !skipping { print }
+      END {
+        if (sections != 1 || (replaced != 1 && !legacy)) exit 1
+      }
+    ' "$base_file"
+  } > "$tmp_file" || {
+    rm -f "$tmp_file"
+    echo "error: unrecognized delegation instructions in $base_file; existing guidance preserved" >&2
+    return 1
+  }
+
+  if [[ "$check_only" -eq 1 ]]; then
+    if cmp -s "$tmp_file" "$override_file"; then
+      rm -f "$tmp_file"
+      echo "guidance is current: $override_file" >&2
+      return 0
+    fi
+    rm -f "$tmp_file"
+    echo "error: guidance is missing or stale: $override_file; run git-manage-worktree guidance in that worktree" >&2
+    return 1
+  fi
+
   exclude_file="$(git -C "$target_dir" rev-parse --git-path info/exclude)"
   if [[ "$exclude_file" != /* ]]; then
     exclude_file="$target_dir/$exclude_file"
   fi
-  if ! grep -Fxq '/AGENTS.override.md' "$exclude_file"; then
+  mkdir -p "$(dirname "$exclude_file")"
+  if ! grep -Fxq '/AGENTS.override.md' "$exclude_file" 2>/dev/null; then
     printf '\n/AGENTS.override.md\n' >> "$exclude_file"
   fi
-
-  tmp_file="$(mktemp "$target_dir/.AGENTS.override.md.XXXXXX")"
-  {
-    head -n 1 "$base_file"
-    printf '\n'
-    cat "$AGENTS_OVERRIDE_TEMPLATE"
-    awk '
-      NR == 1 { next }
-      /^## Delegation \(cascade\)[[:space:]]*$/ { skipping = 1; next }
-      skipping && /^## / { skipping = 0 }
-      !skipping { print }
-    ' "$base_file"
-  } > "$tmp_file"
   mv "$tmp_file" "$override_file"
+  echo "guidance refreshed: $override_file" >&2
 }
 
 open_tmux_window() {
@@ -239,7 +270,7 @@ case "$cmd" in
     fi
     set +x
 
-    generate_personal_agents_override "$DEST"
+    generate_personal_agents_override "$DEST" 0 1
 
     printf '%s\n' "$DEST"
     if [[ "$OPEN_TMUX" -eq 1 ]]; then
@@ -251,6 +282,11 @@ case "$cmd" in
     ;;
 
   guidance)
+    CHECK_ONLY=0
+    if [[ "${1:-}" == "--check" ]]; then
+      CHECK_ONLY=1
+      shift
+    fi
     if [[ $# -gt 1 ]]; then usage; fi
 
     if [[ $# -eq 1 ]]; then
@@ -265,7 +301,7 @@ case "$cmd" in
       DEST="$(git rev-parse --show-toplevel)"
     fi
 
-    generate_personal_agents_override "$DEST"
+    generate_personal_agents_override "$DEST" "$CHECK_ONLY"
     printf '%s\n' "$DEST/AGENTS.override.md"
     ;;
 
