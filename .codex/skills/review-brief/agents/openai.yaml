@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Brief"
+  short_description: "Understand a branch before human code review"
+  default_prompt: "Use $review-brief to explain this branch and help me focus my code review."
