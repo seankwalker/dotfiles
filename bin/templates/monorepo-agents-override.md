@@ -5,3 +5,30 @@
 The primary session owns planning, implementation, command execution, testing, and review. Do not invoke the cascade orchestrator or delegate implementation and command execution to cascade roles by default. Use subagents only when parallel research, an independent review, or the scale of the task materially benefits from them.
 
 All other repository guidance below remains in force.
+
+## Personal review and playtest guidance
+
+### When reporting an agent review
+
+Carry every confirmed behavioral finding through the existing review report and final handoff with
+one disposition: **fixed** (with verification), **accepted** (with the user's explicit acceptance),
+or **open** (including deferred work). Reclassification or a documentation-only fix does not close
+an underlying behavior defect. Keep open findings visible even when the diff is otherwise ready;
+do not turn them into a clean verdict. Update the existing report rather than adding a review stage.
+
+### When handing over a local playtest
+
+Trial extended October 5, 2026: reassess after one more independent playtest task.
+
+After setup or redeployment for a playtest, verify one representative requested flow before calling
+the environment ready. Healthy pods, a homepage HTTP 200, and `yarn local:verify` establish only
+what those checks exercise. Use the actual affected API or UI flow, including the account, flags,
+and permissions needed for that playtest; record the flow, result, and remaining gaps in the handoff.
+
+Check prerequisites relevant to the changed revision: pending migrations after schema changes,
+generated types or shared-package builds after dependency changes, and configuration required by
+the affected service. Diagnose those before labeling failures unrelated. Use the existing setup
+and migration procedures; a failed check is not permission to reset data or weaken checks.
+
+If the flow cannot be exercised, report the deployment's health separately and name the unverified
+behavior. This applies to playtest handoffs, not every source edit or a request for health status.

@@ -111,6 +111,10 @@ After implementation and verification, return `Ready for review`. This means the
 
 Before handing off, review the complete diff against the base branch yourself and make the handoff identify any design deviation, surprising code path, risk, or verification gap. Do not replace Sean's review with an agent review or claim approval on his behalf.
 
+When an agent review ran, preserve its finding dispositions in the handoff: link the result and list any still-open behavioral findings under `Review attention`, including deferred ones. Do not replace an unresolved finding with a clean summary.
+
+For a local playtest handoff, follow the repository's environment-verification guidance (`local-cluster-ops` in Kindo). Distinguish a healthy deployment from a verified user flow; a diff can be ready for code review while playtest behavior remains unverified.
+
 When Sean returns local review findings, resume the same issue and treat the findings as the current review contract. Address them without discarding valid work, rerun verification affected by the changes, review the complete diff again, and return another `Ready for review` handoff. Surface a finding that conflicts with the accepted design or introduces a consequential choice instead of silently choosing an interpretation.
 
 Do not commit, push, or create a PR from `Ready for review`. Those actions require Sean to accept the local diff and explicitly request the publication step.
