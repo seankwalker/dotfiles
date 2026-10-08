@@ -3,7 +3,7 @@ approvals_reviewer = "user"
 plan_mode_reasoning_effort = "xhigh"
 service_tier = "fast"
 model = "gpt-6-astra"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 
 [projects."/Users/sean/Developer/mono"]
 trust_level = "trusted"
@@ -41,13 +41,18 @@ notification_condition = "always"
 status_line = ["model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit", "fast-mode"]
 status_line_use_colors = true
 vim_mode_default = true
+screen_reader_detection_done = true
+theme = "elflord-skw-ariake"
+session_picker_view = "dense"
+fullscreen_transcript = false
 
 [tui.model_availability_nux]
 "gpt-5.6-sol" = 3
 gpt-6-astra = 4
+"gpt-6.1-sol" = 4
 
 [features]
-experimental_use_rmcp_client = true # Needed for Linear MCP https://linear.app/docs/mcp#codex
+workspace_dependencies = false # Workaround for issue with bad feature negotiation on v0.157.0
 
 [mcp_servers.notion]
 url = "https://mcp.notion.com/mcp"

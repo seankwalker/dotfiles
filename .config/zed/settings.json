@@ -8,6 +8,9 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   // AI
+  "edit_predictions": {
+    "provider": "copilot"
+  },
   "markdown_preview": {
     "max_width": 1200.0,
     "limit_content_width": true
@@ -21,6 +24,13 @@
   },
   "cli_default_open_behavior": "existing_window",
   "agent_servers": {
+    "claude-acp": {
+      "default_config_options": {
+        "fast": false,
+        "mode": "bypassPermissions"
+      },
+      "type": "registry"
+    },
     "codex-acp": {
       "env": {
         "CODEX_PATH": "/opt/homebrew/bin/codex"
@@ -28,7 +38,7 @@
       "default_config_options": {
         "model": "gpt-6-astra",
         "fast-mode": true,
-        "reasoning_effort": "high",
+        "reasoning_effort": "xhigh",
         "mode": "agent-full-access"
       },
       "type": "registry"
@@ -38,6 +48,9 @@
   "show_wrap_guides": true,
   "proxy": "",
   "agent": {
+    "tool_permissions": {
+      "default": "allow"
+    },
     "notify_when_agent_waiting": "all_screens",
     "expand_edit_card": false,
     "expand_terminal_card": false,
@@ -48,11 +61,7 @@
       "model": "claude-opus-4-thinking-latest"
     },
     "model_parameters": [],
-    "always_allow_tool_actions": true,
     "dock": "left"
-  },
-  "features": {
-    "edit_prediction_provider": "copilot"
   },
   "show_edit_predictions": true,
 
